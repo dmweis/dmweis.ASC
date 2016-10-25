@@ -15,7 +15,7 @@
         <DockPanel VerticalAlignment="Center" Margin="10">
             <Label DockPanel.Dock="Left" Content="Servo 2"/>
             <TextBox Text="{Binding ElementName=slider2, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" Width="40"/>
-            <Slider x:Name="slider2" Minimum="107" Maximum="575" ValueChanged="slider2_ValueChanged" TickFrequency="1" IsSnapToTickEnabled="True"/>
+            <Slider x:Name="slider2" Minimum="110" Maximum="570" ValueChanged="slider2_ValueChanged" TickFrequency="1" IsSnapToTickEnabled="True"/>
         </DockPanel>
     </StackPanel>
 </Window>
