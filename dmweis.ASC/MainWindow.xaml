@@ -6,7 +6,16 @@
         xmlns:local="clr-namespace:dmweis.ASC"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+    <StackPanel>
+        <DockPanel VerticalAlignment="Center" Margin="10">
+            <Label DockPanel.Dock="Left" Content="Servo 1"/>
+            <TextBox Text="{Binding ElementName=slider1, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" Width="40"/>
+            <Slider x:Name="slider1" Minimum="150" Maximum="590" ValueChanged="slider1_ValueChanged" TickFrequency="1" IsSnapToTickEnabled="True"/>
+        </DockPanel>
+        <DockPanel VerticalAlignment="Center" Margin="10">
+            <Label DockPanel.Dock="Left" Content="Servo 2"/>
+            <TextBox Text="{Binding ElementName=slider2, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" Width="40"/>
+            <Slider x:Name="slider2" Minimum="107" Maximum="575" ValueChanged="slider2_ValueChanged" TickFrequency="1" IsSnapToTickEnabled="True"/>
+        </DockPanel>
+    </StackPanel>
 </Window>

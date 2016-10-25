@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO.Ports;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace dmweis.ASC.Connector
+{
+    public class ServoController
+    {
+        private SerialPort m_Arduino;
+
+        public ServoController( string comPort )
+        {
+            m_Arduino = new SerialPort( comPort, 9600 );
+            m_Arduino.DtrEnable = true;
+            m_Arduino.Open();
+        }
+
+        public void SetServo( int numberOfServo, int pwm )
+        {
+            byte[] byteArray = new byte[3];
+            byteArray[ 0 ] = (byte) numberOfServo;
+            byteArray[ 1 ] = (byte) (( pwm >> 8 ) & 0xFF);
+            byteArray[ 2 ] = (byte) ( pwm & 0xFF );
+            m_Arduino.Write( byteArray, 0, 3 );
+        }
+    }
+}

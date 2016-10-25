@@ -95,6 +95,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\dmweis.ASC.Connector\dmweis.ASC.Connector.csproj">
+      <Project>{248e7742-4733-4745-9c3c-1b48adfd9056}</Project>
+      <Name>dmweis.ASC.Connector</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
