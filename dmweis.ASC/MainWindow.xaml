@@ -10,12 +10,37 @@
         <DockPanel VerticalAlignment="Center" Margin="10">
             <Label DockPanel.Dock="Left" Content="Servo 1"/>
             <TextBox Text="{Binding ElementName=slider1, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" Width="40"/>
-            <Slider x:Name="slider1" Minimum="150" Maximum="590" ValueChanged="slider1_ValueChanged" TickFrequency="1" IsSnapToTickEnabled="True"/>
+            <Slider x:Name="slider1" Minimum="100" Maximum="600" ValueChanged="slider1_ValueChanged" TickFrequency="1" IsSnapToTickEnabled="True"/>
         </DockPanel>
         <DockPanel VerticalAlignment="Center" Margin="10">
             <Label DockPanel.Dock="Left" Content="Servo 2"/>
             <TextBox Text="{Binding ElementName=slider2, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" Width="40"/>
-            <Slider x:Name="slider2" Minimum="110" Maximum="570" ValueChanged="slider2_ValueChanged" TickFrequency="1" IsSnapToTickEnabled="True"/>
+            <Slider x:Name="slider2" Minimum="100" Maximum="600" ValueChanged="slider2_ValueChanged" TickFrequency="1" IsSnapToTickEnabled="True"/>
+        </DockPanel>
+        <DockPanel VerticalAlignment="Center" Margin="10">
+            <Label DockPanel.Dock="Left" Content="Servo 3"/>
+            <TextBox Text="{Binding ElementName=slider3, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" Width="40"/>
+            <Slider x:Name="slider3" Minimum="100" Maximum="600" ValueChanged="slider3_ValueChanged" TickFrequency="1" IsSnapToTickEnabled="True"/>
+        </DockPanel>
+        <DockPanel VerticalAlignment="Center" Margin="10">
+            <Label DockPanel.Dock="Left" Content="Servo 4"/>
+            <TextBox Text="{Binding ElementName=slider4, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" Width="40"/>
+            <Slider x:Name="slider4" Minimum="100" Maximum="600" ValueChanged="slider4_ValueChanged" TickFrequency="1" IsSnapToTickEnabled="True"/>
+        </DockPanel>
+        <DockPanel VerticalAlignment="Center" Margin="10">
+            <Label DockPanel.Dock="Left" Content="Servo 5"/>
+            <TextBox Text="{Binding ElementName=slider5, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" Width="40"/>
+            <Slider x:Name="slider5" Minimum="100" Maximum="600" ValueChanged="slider5_ValueChanged" TickFrequency="1" IsSnapToTickEnabled="True"/>
+        </DockPanel>
+        <DockPanel VerticalAlignment="Center" Margin="10">
+            <Label DockPanel.Dock="Left" Content="Servo 6"/>
+            <TextBox Text="{Binding ElementName=slider6, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" Width="40"/>
+            <Slider x:Name="slider6" Minimum="100" Maximum="600" ValueChanged="slider6_ValueChanged" TickFrequency="1" IsSnapToTickEnabled="True"/>
+        </DockPanel>
+        <DockPanel VerticalAlignment="Center" Margin="10">
+            <Label DockPanel.Dock="Left" Content="Servo 7"/>
+            <TextBox Text="{Binding ElementName=slider7, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" Width="40"/>
+            <Slider x:Name="slider7" Minimum="100" Maximum="600" ValueChanged="slider7_ValueChanged" TickFrequency="1" IsSnapToTickEnabled="True"/>
         </DockPanel>
     </StackPanel>
 </Window>

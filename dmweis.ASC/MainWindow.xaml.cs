@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,7 +22,6 @@ namespace dmweis.ASC
     /// </summary>
     public partial class MainWindow : Window
     {
-
         private ServoController m_ServoController;
 
         public MainWindow()
@@ -38,6 +38,31 @@ namespace dmweis.ASC
         private void slider2_ValueChanged( object sender, RoutedPropertyChangedEventArgs<double> e )
         {
             m_ServoController?.SetServo( 1, (int) e.NewValue );
+        }
+
+        private void slider3_ValueChanged( object sender, RoutedPropertyChangedEventArgs<double> e )
+        {
+            m_ServoController?.SetServo( 2, (int)e.NewValue );
+        }
+
+        private void slider4_ValueChanged( object sender, RoutedPropertyChangedEventArgs<double> e )
+        {
+            m_ServoController?.SetServo( 3, (int)e.NewValue );
+        }
+
+        private void slider5_ValueChanged( object sender, RoutedPropertyChangedEventArgs<double> e )
+        {
+            m_ServoController?.SetServo( 8, (int)e.NewValue );
+        }
+
+        private void slider6_ValueChanged( object sender, RoutedPropertyChangedEventArgs<double> e )
+        {
+            m_ServoController?.SetServo( 9, (int)e.NewValue );
+        }
+
+        private void slider7_ValueChanged( object sender, RoutedPropertyChangedEventArgs<double> e )
+        {
+            m_ServoController?.SetServo( 10, (int)e.NewValue );
         }
     }
 }
