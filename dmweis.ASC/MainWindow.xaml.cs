@@ -1,18 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using dmweis.ASC.Connector;
 
 namespace dmweis.ASC
@@ -23,46 +15,132 @@ namespace dmweis.ASC
     public partial class MainWindow : Window
     {
         private ServoController m_ServoController;
+        private ObservableCollection<ServoControllerViewModel> m_ServoControllerViewModels;
 
         public MainWindow()
         {
             InitializeComponent();
             m_ServoController = new ServoController( "COM3" );
+            m_ServoControllerViewModels = new ObservableCollection<ServoControllerViewModel>();
+            m_ServoControllerViewModels.Add( new ServoControllerViewModel( m_ServoController, 0 ) );
+            m_ServoControllerViewModels.Add( new ServoControllerViewModel( m_ServoController, 1 ) );
+            ServoCollectionView.ItemsSource = m_ServoControllerViewModels;
         }
 
-        private void slider1_ValueChanged( object sender, RoutedPropertyChangedEventArgs<double> e )
+        private void AddServoButton( object sender, RoutedEventArgs e )
         {
-            m_ServoController?.SetServo( 0, (int) e.NewValue );
+            int index;
+            if( !int.TryParse( ( sender as Button )?.Tag as string, out index ) )
+            {
+                return;
+            }
+            m_ServoControllerViewModels.Add( new ServoControllerViewModel( m_ServoController, index ) );
+
         }
 
-        private void slider2_ValueChanged( object sender, RoutedPropertyChangedEventArgs<double> e )
+        private void RemoveServoButton( object sender, RoutedEventArgs e )
         {
-            m_ServoController?.SetServo( 1, (int) e.NewValue );
+            Button senderButton = sender as Button;
+            string servoName = senderButton.Tag as string;
+            ServoControllerViewModel servoToRemove = null;
+            foreach( var servoViewModel in m_ServoControllerViewModels )
+            {
+                if( servoViewModel.Name == servoName )
+                {
+                    servoToRemove = servoViewModel;
+                    break;
+                }
+            }
+            m_ServoControllerViewModels.Remove( servoToRemove );
+        }
+    }
+
+    class ServoControllerViewModel : INotifyPropertyChanged
+    {
+        private ServoController m_ServoController;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private string name;
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                name = value;
+                NotifyPropertyChanged();
+            }
         }
 
-        private void slider3_ValueChanged( object sender, RoutedPropertyChangedEventArgs<double> e )
+        private int value;
+        public int Value
         {
-            m_ServoController?.SetServo( 2, (int)e.NewValue );
+            get { return value; }
+            set
+            {
+                if( value >= Minimum && value <= Maximum )
+                {
+                    this.value = value;
+                    NotifyPropertyChanged();
+                    UpdateServpValue( value );
+                }
+            }
         }
 
-        private void slider4_ValueChanged( object sender, RoutedPropertyChangedEventArgs<double> e )
+        private int servoIndex;
+        public int ServoIndex
         {
-            m_ServoController?.SetServo( 3, (int)e.NewValue );
+            get { return servoIndex; }
+            set
+            {
+                servoIndex = value;
+                NotifyPropertyChanged();
+            }
         }
 
-        private void slider5_ValueChanged( object sender, RoutedPropertyChangedEventArgs<double> e )
+        private int minimum;
+        public int Minimum
         {
-            m_ServoController?.SetServo( 8, (int)e.NewValue );
+            get { return minimum; }
+            set
+            {
+                minimum = value;
+                NotifyPropertyChanged();
+            }
         }
 
-        private void slider6_ValueChanged( object sender, RoutedPropertyChangedEventArgs<double> e )
+        private int maximum;
+        public int Maximum
         {
-            m_ServoController?.SetServo( 9, (int)e.NewValue );
+            get { return maximum; }
+            set
+            {
+                maximum = value;
+                NotifyPropertyChanged();
+            }
         }
 
-        private void slider7_ValueChanged( object sender, RoutedPropertyChangedEventArgs<double> e )
+        public ServoControllerViewModel( ServoController servoController, int servoIndex , string servoName = null, int value = 300, int minimum = 100, int maximum = 600 )
         {
-            m_ServoController?.SetServo( 10, (int)e.NewValue );
+            ServoIndex = servoIndex;
+            Name = servoName ?? $"Servo {servoIndex}";
+            Minimum = minimum;
+            Maximum = maximum;
+            Value = value;
+            m_ServoController = servoController;
+        }
+
+        private void UpdateServpValue( int value )
+        {
+            m_ServoController?.SetServo( ServoIndex, value );
+        }
+
+        private void NotifyPropertyChanged( [CallerMemberName] string propertyName = "" )
+        {
+            PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( propertyName ) );
         }
     }
 }

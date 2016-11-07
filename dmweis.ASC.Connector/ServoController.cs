@@ -22,7 +22,7 @@ namespace dmweis.ASC.Connector
             //m_Task = Task.Factory.StartNew( ServoUpdateLoop, TaskCreationOptions.LongRunning );
         }
 
-        public void SetServoInternal( int numberOfServo, int pwm )
+        private void SetServoInternal( int numberOfServo, int pwm )
         {
             m_ServoValues[ numberOfServo ] = pwm;
         }
