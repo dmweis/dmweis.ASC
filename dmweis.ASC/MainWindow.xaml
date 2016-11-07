@@ -45,7 +45,7 @@
                             <TextBlock DockPanel.Dock="Left" Text="value: "/>
                             <TextBox DockPanel.Dock="Right" Text="{Binding Value}"/>
                         </DockPanel>
-                        <Slider Grid.Column="2" VerticalAlignment="Center" Minimum="{Binding Minimum}" Maximum="{Binding Maximum}" Value="{Binding Value, Mode=TwoWay}" TickFrequency="1" IsSnapToTickEnabled="True"/>
+                        <Slider Grid.Column="2" VerticalAlignment="Center" Minimum="{Binding Minimum}" Maximum="{Binding Maximum}" Value="{Binding Value, Mode=TwoWay}" TickFrequency="1" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True"/>
                         <DockPanel Grid.Column="3">
                             <TextBlock DockPanel.Dock="Left" Text="Minimum: "/>
                             <TextBox DockPanel.Dock="Right" Text="{Binding Minimum}"/>
