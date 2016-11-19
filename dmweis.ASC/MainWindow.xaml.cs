@@ -24,6 +24,7 @@ namespace dmweis.ASC
             m_ServoControllerViewModels = new ObservableCollection<ServoControllerViewModel>();
             m_ServoControllerViewModels.Add( new ServoControllerViewModel( m_ServoController, 0 ) );
             m_ServoControllerViewModels.Add( new ServoControllerViewModel( m_ServoController, 1 ) );
+            m_ServoControllerViewModels.Add( new ServoControllerViewModel( m_ServoController, 2 ) );
             ServoCollectionView.ItemsSource = m_ServoControllerViewModels;
         }
 
