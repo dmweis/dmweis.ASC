@@ -63,5 +63,7 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        <Button Content="Magnet on" Click="Button_Click"/>
+        <Button Content="Magnet off" Click="Button_Click_1"/>
     </StackPanel>
 </Window>
