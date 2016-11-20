@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:dmweis.ASC"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="400" Width="525">
     <StackPanel>
         <DockPanel VerticalAlignment="Center" Margin="10">
             <Label DockPanel.Dock="Left" Content="Servo 1"/>
@@ -42,5 +42,7 @@
             <TextBox Text="{Binding ElementName=slider7, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" Width="40"/>
             <Slider x:Name="slider7" Minimum="100" Maximum="600" ValueChanged="slider7_ValueChanged" TickFrequency="1" IsSnapToTickEnabled="True"/>
         </DockPanel>
+        <Button Content="Magnet on" Click="Button_Click"/>
+        <Button Content="Magnet off" Click="Button_Click_1"/>
     </StackPanel>
 </Window>

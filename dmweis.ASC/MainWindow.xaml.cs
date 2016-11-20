@@ -64,5 +64,15 @@ namespace dmweis.ASC
         {
             m_ServoController?.SetServo( 10, (int)e.NewValue );
         }
+
+        private void Button_Click( object sender, RoutedEventArgs e )
+        {
+            m_ServoController?.SetServo( 20, 300 );
+        }
+
+        private void Button_Click_1( object sender, RoutedEventArgs e )
+        {
+            m_ServoController?.SetServo( 21, 300 );
+        }
     }
 }
