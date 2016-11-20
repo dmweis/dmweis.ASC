@@ -20,7 +20,7 @@ namespace dmweis.ASC
         public MainWindow()
         {
             InitializeComponent();
-            m_ServoController = new ServoController( "COM3" );
+            m_ServoController = new ServoController( "COM15" );
             m_ServoControllerViewModels = new ObservableCollection<ServoControllerViewModel>();
             m_ServoControllerViewModels.Add( new ServoControllerViewModel( m_ServoController, 0 ) );
             m_ServoControllerViewModels.Add( new ServoControllerViewModel( m_ServoController, 1 ) );

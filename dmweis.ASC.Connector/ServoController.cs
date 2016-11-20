@@ -17,7 +17,7 @@ namespace dmweis.ASC.Connector
         {
             m_ServoValues = new int[ 16 ];
             m_Arduino = new SerialPort( comPort, 9600 );
-            m_Arduino.DtrEnable = true;
+            m_Arduino.DtrEnable = false;
             m_Arduino.Open();
             //m_Task = Task.Factory.StartNew( ServoUpdateLoop, TaskCreationOptions.LongRunning );
         }
