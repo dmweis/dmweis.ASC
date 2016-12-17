@@ -10,19 +10,20 @@ namespace dmweis.ASC.Connector
     public class ServoController
     {
         private SerialPort m_Arduino;
-        private Task m_Task;
         private int[] m_ServoValues;
 
         public ServoController( string comPort )
         {
             m_ServoValues = new int[ 16 ];
-            m_Arduino = new SerialPort( comPort, 9600 );
-            m_Arduino.DtrEnable = true;
-            m_Arduino.Open();
+         m_Arduino = new SerialPort( comPort, 9600 )
+         {
+            DtrEnable = false
+         };
+         m_Arduino.Open();
             //m_Task = Task.Factory.StartNew( ServoUpdateLoop, TaskCreationOptions.LongRunning );
         }
 
-        public void SetServoInternal( int numberOfServo, int pwm )
+        private void SetServoInternal( int numberOfServo, int pwm )
         {
             m_ServoValues[ numberOfServo ] = pwm;
         }
@@ -36,7 +37,7 @@ namespace dmweis.ASC.Connector
             m_Arduino.Write( byteArray, 0, 3 );
         }
 
-        private async void ServoUpdateLoop()
+        private async void ServoUpdateLoopAsync()
         {
             while( true )
             {

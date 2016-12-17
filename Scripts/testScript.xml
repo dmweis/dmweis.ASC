@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<ArmScript xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Movements>
+    <ArmPosition>
+      <WaitBefore>3000</WaitBefore>
+      <WaitAfter>0</WaitAfter>
+      <Base>69</Base>
+      <Shoulder xsi:nil="true" />
+      <Elbow xsi:nil="true" />
+      <Magnet>true</Magnet>
+    </ArmPosition>
+    <ArmPosition>
+      <WaitBefore>3000</WaitBefore>
+      <WaitAfter>0</WaitAfter>
+      <Base>300</Base>
+      <Shoulder xsi:nil="true" />
+      <Elbow xsi:nil="true" />
+      <Magnet>true</Magnet>
+    </ArmPosition>
+  </Movements>
+</ArmScript>

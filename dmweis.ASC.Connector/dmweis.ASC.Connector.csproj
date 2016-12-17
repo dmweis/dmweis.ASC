@@ -40,6 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Arm.cs" />
+    <Compile Include="ArmPosition.cs" />
+    <Compile Include="ArmScript.cs" />
+    <Compile Include="SerialPortExtensions.cs" />
     <Compile Include="ServoController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
