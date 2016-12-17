@@ -1,0 +1,59 @@
+﻿<Window x:Class="dmweis.ASC.ArmController.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:dmweis.ASC.ArmController"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+        <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="7*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Visibility="{Binding PortSelectionOpen, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Label Content="Selected port: " HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <ComboBox ItemsSource="{Binding AvailablePorts}" SelectedItem="{Binding SelectedPort}" Width="100"/>
+            <Button Command="{Binding Connect}" Content="Connect" Margin="10, 0"/>
+        </StackPanel>
+        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="2" Margin="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Row="0">
+                    <CheckBox  Margin="10,5" Content="Repeat" FlowDirection="RightToLeft" IsChecked="{Binding RepeatScript}" VerticalAlignment="Center"/>
+                    <Button Content="Load script" Margin="10,5" VerticalAlignment="Center" Click="LoadScriptButton"/>
+                    <Button Content="Reload script" Margin="10,5" VerticalAlignment="Center" Click="ReloadScriptButton"/>
+                    <Button Content="Start script" Margin="10,5" VerticalAlignment="Center" Command="{Binding StartScript}"/>
+                    <Button Content="Stop script" Margin="10,5" VerticalAlignment="Center" Command="{Binding StopScript}"/>
+                </StackPanel>
+                <ScrollViewer Grid.Row="1">
+                    <ItemsControl ItemsSource="{Binding Path=Script.Movements}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{Binding Comment}" ContentStringFormat="Description: {0}"/>
+                                    <Label Content="{Binding WaitBefore}" ContentStringFormat="WaitBefore: {0}"/>
+                                    <Label Content="{Binding WaitAfter}" ContentStringFormat="WaitAfter: {0}"/>
+                                    <Label Content="{Binding Base}" ContentStringFormat="Base: {0}"/>
+                                    <Label Content="{Binding Shoulder}" ContentStringFormat="Shoulder: {0}"/>
+                                    <Label Content="{Binding Elbow}" ContentStringFormat="Elbow: {0}"/>
+                                    <Label Content="{Binding Magnet}" ContentStringFormat="Magnet: {0}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+                <Grid Grid.Row="2" Visibility="{Binding ScriptRunning, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <TextBlock Foreground="Red" Text="SCRIPT RUNNING"/>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

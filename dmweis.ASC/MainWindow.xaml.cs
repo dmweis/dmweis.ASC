@@ -20,7 +20,7 @@ namespace dmweis.ASC
         public MainWindow()
         {
             InitializeComponent();
-            m_ServoController = new ServoController( "COM15" );
+            m_ServoController = new ServoController( "COM11" );
             m_ServoControllerViewModels = new ObservableCollection<ServoControllerViewModel>();
             m_ServoControllerViewModels.Add( new ServoControllerViewModel( m_ServoController, 0 ) );
             m_ServoControllerViewModels.Add( new ServoControllerViewModel( m_ServoController, 1 ) );
@@ -30,8 +30,7 @@ namespace dmweis.ASC
 
         private void AddServoButton( object sender, RoutedEventArgs e )
         {
-            int index;
-            if( !int.TryParse( ( sender as Button )?.Tag as string, out index ) )
+         if( !int.TryParse( ( sender as Button )?.Tag as string, out int index ) )
             {
                 return;
             }

@@ -29,10 +29,10 @@ namespace dmweis.ASC.ScriptExecuter
         public MainWindow()
         {
             InitializeComponent();
-            m_ServoController = new ServoController( "COM15" );
+            m_ServoController = new ServoController( "COM11" );
         }
 
-        private async void ParseAndExec()
+        private async void ParseAndExecAsync()
         {
             m_Running = true;
             string[] commands = File.ReadAllLines( "script.txt" );
@@ -42,12 +42,12 @@ namespace dmweis.ASC.ScriptExecuter
                 int delay = int.Parse( elements[ 0 ] );
                 int index = int.Parse( elements[ 1 ] );
                 int value = int.Parse( elements[ 2 ] );
-                await ExecuteCommand( delay, index, value );
+                await ExecuteCommandAsync( delay, index, value );
             }
             m_Running = false;
         }
 
-        private async Task ExecuteCommand( int delay, int index, int value )
+        private async Task ExecuteCommandAsync( int delay, int index, int value )
         {
             await Task.Delay( delay );
             m_ServoController.SetServo( index, value );
@@ -57,7 +57,7 @@ namespace dmweis.ASC.ScriptExecuter
         {
             if( !m_Running )
             {
-                Task.Factory.StartNew( ParseAndExec );
+                Task.Factory.StartNew( ParseAndExecAsync );
                 System.Media.SystemSounds.Beep.Play();
             }
         }
