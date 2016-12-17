@@ -2,20 +2,76 @@
 <ArmScript xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Movements>
     <ArmPosition>
-      <WaitBefore>3000</WaitBefore>
-      <WaitAfter>0</WaitAfter>
-      <Base>69</Base>
-      <Shoulder xsi:nil="true" />
-      <Elbow xsi:nil="true" />
+      <Comment>start position</Comment>
+      <WaitBefore>0</WaitBefore>
+      <WaitAfter>1000</WaitAfter>
+      <Base>185</Base>
+      <Shoulder>380</Shoulder>
+      <Elbow>330</Elbow>
+      <Magnet>false</Magnet>
+    </ArmPosition>
+    <ArmPosition>
+      <Comment>hang above lift</Comment>
+      <WaitBefore>0</WaitBefore>
+      <WaitAfter>500</WaitAfter>
+      <Base>210</Base>
+      <Shoulder>380</Shoulder>
+      <Elbow>330</Elbow>
+      <Magnet>false</Magnet>
+    </ArmPosition>
+    <ArmPosition>
+      <Comment>lift position</Comment>
+      <WaitBefore>0</WaitBefore>
+      <WaitAfter>1000</WaitAfter>
+      <Base>210</Base>
+      <Shoulder>285</Shoulder>
+      <Elbow>330</Elbow>
       <Magnet>true</Magnet>
     </ArmPosition>
     <ArmPosition>
-      <WaitBefore>3000</WaitBefore>
-      <WaitAfter>0</WaitAfter>
-      <Base>300</Base>
+      <Comment>hang above lift</Comment>
+      <WaitBefore>0</WaitBefore>
+      <WaitAfter>500</WaitAfter>
+      <Base>210</Base>
+      <Shoulder>380</Shoulder>
+      <Elbow>330</Elbow>
+      <Magnet xsi:nil="true" />
+    </ArmPosition>
+    <ArmPosition>
+      <Comment>start position</Comment>
+      <WaitBefore>0</WaitBefore>
+      <WaitAfter>500</WaitAfter>
+      <Base>185</Base>
+      <Shoulder>380</Shoulder>
+      <Elbow>330</Elbow>
+      <Magnet xsi:nil="true" />
+    </ArmPosition>
+    <ArmPosition>
+      <Comment>drop point</Comment>
+      <WaitBefore>0</WaitBefore>
+      <WaitAfter>1000</WaitAfter>
+      <Base>140</Base>
+      <Shoulder>320</Shoulder>
+      <Elbow>330</Elbow>
+      <Magnet xsi:nil="true" />
+    </ArmPosition>
+    <ArmPosition>
+      <Comment>drop point</Comment>
+      <WaitBefore>0</WaitBefore>
+      <WaitAfter>100</WaitAfter>
+      <Base xsi:nil="true" />
       <Shoulder xsi:nil="true" />
       <Elbow xsi:nil="true" />
-      <Magnet>true</Magnet>
+      <Magnet>false</Magnet>
+    </ArmPosition>
+    <ArmPosition>
+      <Comment>start position</Comment>
+      <WaitBefore>0</WaitBefore>
+      <WaitAfter>400</WaitAfter>
+      <Base>185</Base>
+      <Shoulder>380</Shoulder>
+      <Elbow>330</Elbow>
+      <Magnet xsi:nil="true" />
     </ArmPosition>
   </Movements>
 </ArmScript>

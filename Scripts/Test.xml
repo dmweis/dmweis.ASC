@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<ArmScript xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Movements>
+    <ArmPosition>
+      <Comment>start position</Comment>
+      <WaitBefore>0</WaitBefore>
+      <WaitAfter>2000</WaitAfter>
+      <Base>185</Base>
+      <Shoulder>380</Shoulder>
+      <Elbow>330</Elbow>
+      <Magnet>false</Magnet>
+    </ArmPosition>
+    <ArmPosition>
+      <Comment>Test</Comment>
+      <WaitBefore>2000</WaitBefore>
+      <WaitAfter>2000</WaitAfter>
+      <Base>215</Base>
+      <Shoulder>289</Shoulder>
+      <Elbow>333</Elbow>
+      <Magnet>false</Magnet>
+    </ArmPosition>
+    <ArmPosition>
+      <Comment>Test</Comment>
+      <WaitBefore>0</WaitBefore>
+      <WaitAfter>2000</WaitAfter>
+      <Magnet>true</Magnet>
+    </ArmPosition>
+    <ArmPosition>
+      <Comment>Test</Comment>
+      <WaitBefore>0</WaitBefore>
+      <WaitAfter>1000</WaitAfter>
+      <Magnet>false</Magnet>
+    </ArmPosition>
+    <ArmPosition>
+      <Comment>start position</Comment>
+      <WaitBefore>0</WaitBefore>
+      <WaitAfter>2000</WaitAfter>
+      <Base>185</Base>
+      <Shoulder>380</Shoulder>
+      <Elbow>330</Elbow>
+      <Magnet>false</Magnet>
+    </ArmPosition>
+  </Movements>
+</ArmScript>

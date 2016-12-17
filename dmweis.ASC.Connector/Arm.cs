@@ -37,35 +37,58 @@ namespace dmweis.ASC.Connector
 
       public async Task<Arm> MoveToAsync( ArmPosition position, bool ignoreTimeouts = false )
       {
+         position.Executed = true;
          if( !ignoreTimeouts )
          {
             await Task.Delay( position.WaitBefore );
          }
-         if( position.Base != null )
+         byte[] message = new byte[ 0 ];
+         if( position.Elbow != null )
          {
-            await SetServoAsync( c_BaseIndex, position.Base.Value );
+            byte[] movementCommand = CommandToMessage( c_ElbowIndex, position.Elbow.Value );
+            message = message.Concat( movementCommand ).ToArray();
          }
          if( position.Shoulder != null )
          {
-            await SetServoAsync( c_ShoulderIndex, position.Shoulder.Value );
+            byte[] movementCommand = CommandToMessage( c_ShoulderIndex, position.Shoulder.Value );
+            message = message.Concat( movementCommand ).ToArray();
          }
-         if( position.Elbow != null )
+         if( position.Base != null )
          {
-            await SetServoAsync( c_ElbowIndex, position.Elbow.Value );
+            byte[] movementCommand = CommandToMessage( c_BaseIndex, position.Base.Value );
+            message = message.Concat( movementCommand ).ToArray();
          }
          if( position.Magnet == true )
          {
-            await SetServoAsync( c_MagnetOn, 300 );
+            byte[] movementCommand = CommandToMessage( c_MagnetOn, 300 );
+            message = message.Concat( movementCommand ).ToArray();
          }
          else if( position.Magnet == false )
          {
-            await SetServoAsync( c_MagnetOff, 300 );
+            byte[] movementCommand = CommandToMessage( c_MagnetOff, 300 );
+            message = message.Concat( movementCommand ).ToArray();
          }
+         await SendMessage( message );
          if( !ignoreTimeouts )
          {
             await Task.Delay( position.WaitAfter );
          }
+         position.Executed = false;
          return this;
+      }
+
+      private byte[] CommandToMessage( int servoIndex, int pwm )
+      {
+         byte[] byteArray = new byte[ 3 ];
+         byteArray[ 0 ] = (byte) servoIndex;
+         byteArray[ 1 ] = (byte) ((pwm >> 8) & 0xFF);
+         byteArray[ 2 ] = (byte) (pwm & 0xFF);
+         return byteArray;
+      }
+
+      private Task SendMessage( byte[] message )
+      {
+         return m_Arduino.WriteBytesAsync( message );
       }
 
       private Task SetServoAsync( int servoIndex, int pwm )

@@ -8,6 +8,7 @@
         Title="MainWindow" Height="350" Width="525">
     <Window.Resources>
         <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <local:BoolToColorConverter x:Key="BoolToColorConverter"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -19,12 +20,12 @@
             <ComboBox ItemsSource="{Binding AvailablePorts}" SelectedItem="{Binding SelectedPort}" Width="100"/>
             <Button Command="{Binding Connect}" Content="Connect" Margin="10, 0"/>
         </StackPanel>
-        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="2" Margin="1">
+        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1" Margin="1">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="7*"/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Row="0">
                     <CheckBox  Margin="10,5" Content="Repeat" FlowDirection="RightToLeft" IsChecked="{Binding RepeatScript}" VerticalAlignment="Center"/>
@@ -37,7 +38,7 @@
                     <ItemsControl ItemsSource="{Binding Path=Script.Movements}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal" Background="{Binding Executed, Converter={StaticResource BoolToColorConverter}}">
                                     <Label Content="{Binding Comment}" ContentStringFormat="Description: {0}"/>
                                     <Label Content="{Binding WaitBefore}" ContentStringFormat="WaitBefore: {0}"/>
                                     <Label Content="{Binding WaitAfter}" ContentStringFormat="WaitAfter: {0}"/>
@@ -51,7 +52,7 @@
                     </ItemsControl>
                 </ScrollViewer>
                 <Grid Grid.Row="2" Visibility="{Binding ScriptRunning, Converter={StaticResource BoolToVisibilityConverter}}">
-                    <TextBlock Foreground="Red" Text="SCRIPT RUNNING"/>
+                    <TextBlock Foreground="Red" Text="SCRIPT RUNNING" FontSize="20" HorizontalAlignment="Center"/>
                 </Grid>
             </Grid>
         </Border>
