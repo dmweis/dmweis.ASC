@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dmweis.ASC.ScriptExecuter",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dmweis.ASC.ArmController", "dmweis.ASC.ArmController\dmweis.ASC.ArmController.csproj", "{B4909272-6D12-4256-9F2D-B80C5A9276D7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XboxController", "XboxController\XboxController.csproj", "{12490721-E52C-49EB-B7FC-3422EC5E7BCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XboxControllerTestConsole", "XboxControllerTestConsole\XboxControllerTestConsole.csproj", "{5DF3AE12-5C67-4E0A-8FF3-20D781145FF5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{B4909272-6D12-4256-9F2D-B80C5A9276D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4909272-6D12-4256-9F2D-B80C5A9276D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4909272-6D12-4256-9F2D-B80C5A9276D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12490721-E52C-49EB-B7FC-3422EC5E7BCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12490721-E52C-49EB-B7FC-3422EC5E7BCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12490721-E52C-49EB-B7FC-3422EC5E7BCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12490721-E52C-49EB-B7FC-3422EC5E7BCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DF3AE12-5C67-4E0A-8FF3-20D781145FF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DF3AE12-5C67-4E0A-8FF3-20D781145FF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DF3AE12-5C67-4E0A-8FF3-20D781145FF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DF3AE12-5C67-4E0A-8FF3-20D781145FF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
