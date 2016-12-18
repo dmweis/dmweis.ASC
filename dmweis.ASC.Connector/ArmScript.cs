@@ -10,10 +10,10 @@ namespace dmweis.ASC.Connector
 {
    public class ArmScript
    {
-      public List<ArmPosition> Movements { get; set; }
+      public List<ArmCommand> Movements { get; set; }
       public ArmScript()
       {
-         Movements = new List<ArmPosition>();
+         Movements = new List<ArmCommand>();
       }
 
       public static ArmScript ReadArmScript( string path )

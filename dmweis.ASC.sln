@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XboxController", "XboxContr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XboxControllerTestConsole", "XboxControllerTestConsole\XboxControllerTestConsole.csproj", "{5DF3AE12-5C67-4E0A-8FF3-20D781145FF5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndgleTurner", "AndgleTurner\AndgleTurner.csproj", "{0B9EDB36-C507-4313-920A-2EB363C27408}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{5DF3AE12-5C67-4E0A-8FF3-20D781145FF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DF3AE12-5C67-4E0A-8FF3-20D781145FF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DF3AE12-5C67-4E0A-8FF3-20D781145FF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B9EDB36-C507-4313-920A-2EB363C27408}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B9EDB36-C507-4313-920A-2EB363C27408}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B9EDB36-C507-4313-920A-2EB363C27408}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B9EDB36-C507-4313-920A-2EB363C27408}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

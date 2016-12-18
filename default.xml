@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<ArmConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ShoulderLength>14.8</ShoulderLength>
+  <ElbowLength>16</ElbowLength>
+  <BaseMin>
+    <Pwm>470</Pwm>
+    <Angle>-90</Angle>
+  </BaseMin>
+  <BaseMax>
+    <Pwm>150</Pwm>
+    <Angle>90</Angle>
+  </BaseMax>
+  <ShoulderMin>
+    <Pwm>450</Pwm>
+    <Angle>90</Angle>
+  </ShoulderMin>
+  <ShoulderMax>
+    <Pwm>220</Pwm>
+    <Angle>0</Angle>
+  </ShoulderMax>
+  <ElbowMin>
+    <Pwm>400</Pwm>
+    <Angle>90</Angle>
+  </ElbowMin>
+  <ElbowMax>
+    <Pwm>210</Pwm>
+    <Angle>40</Angle>
+  </ElbowMax>
+</ArmConfiguration>

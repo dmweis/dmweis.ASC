@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 
 namespace dmweis.ASC.Connector
 {
-   public class ArmPosition : INotifyPropertyChanged
+   public class ArmCommand : INotifyPropertyChanged
    {
       public event PropertyChangedEventHandler PropertyChanged;
 
