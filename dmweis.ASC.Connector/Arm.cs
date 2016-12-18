@@ -46,14 +46,10 @@ namespace dmweis.ASC.Connector
          double elbowAngle = Math.Acos( (Le.Square() + Ls.Square() - cAngle.Square()) / (2.0 * Le * Ls) ).RadToDegree();
 
          // elbow to ground angle
-         double removedAngle = 90.0 - Math.Atan( yOffset / z ).RadToDegree();
-         // stupid trick
-         if( z < 0.0 )
-         {
-            removedAngle = 180 - removedAngle;
-         }
+         double removedAngle = 90.0 - Math.Abs( Math.Atan( yOffset / z ).RadToDegree() );
          // end stupid trick
-         double elbowToGround = Math.Acos( (cAngle.Square() + Le.Square() - Ls.Square()) / (2.0 * Le * cAngle) ).RadToDegree() - removedAngle;
+         double gripAngle = Math.Acos( (cAngle.Square() + Le.Square() - Ls.Square()) / (2.0 * Le * cAngle) ).RadToDegree();
+         double elbowToGround = z >= 0 ? gripAngle - removedAngle : gripAngle + removedAngle;
          AnglesToPwms( angleBase, shoulderAngle, elbowToGround );
       }
 
