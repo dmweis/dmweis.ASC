@@ -33,7 +33,8 @@ namespace dmweis.ASC.Connector
          double Ls = m_Configuration.ShoulderLength;
 
          // base angle
-         double angleBase = Math.Atan( x / yOrigin ).RadToDegree();
+         // Use Atan2 to doctor for cases in which y is negative
+         double angleBase = Math.Atan2( x, yOrigin ).RadToDegree();
          double yOffset = Math.Sqrt( x.Square() + yOrigin.Square() );
 
          // shoulder angle
