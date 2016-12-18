@@ -27,19 +27,19 @@ namespace dmweis.ASC.Connector
          };
          m_Arduino.Open();
       }
-      public void MoveToCartesian( double x, double yOrigin, double z )
+      public void MoveToCartesian( double x, double y, double z )
       {
          double Le = m_Configuration.ElbowLength;
          double Ls = m_Configuration.ShoulderLength;
 
          // base angle
          // Use Atan2 to doctor for cases in which y is negative
-         double angleBase = Math.Atan2( x, yOrigin ).RadToDegree();
-         double yOffset = Math.Sqrt( x.Square() + yOrigin.Square() );
+         double angleBase = Math.Atan2( x, y ).RadToDegree();
+         double distance = Math.Sqrt( x.Square() + y.Square() );
 
          // shoulder angle
-         double bottomAngle = Math.Atan( z / yOffset ).RadToDegree();
-         double cAngle = Math.Sqrt( z.Square() + yOffset.Square() );
+         double bottomAngle = Math.Atan( z / distance ).RadToDegree();
+         double cAngle = Math.Sqrt( z.Square() + distance.Square() );
          double upperAngle = Math.Acos( (Ls.Square() + cAngle.Square() - Le.Square()) / (2.0 * Ls * cAngle) ).RadToDegree();
          double shoulderAngle = bottomAngle + upperAngle;
 
@@ -47,18 +47,19 @@ namespace dmweis.ASC.Connector
          double elbowAngle = Math.Acos( (Le.Square() + Ls.Square() - cAngle.Square()) / (2.0 * Le * Ls) ).RadToDegree();
 
          // elbow to ground angle
-         double removedAngle = 90.0 - Math.Abs( Math.Atan( yOffset / z ).RadToDegree() );
+         double removedAngle = 90.0 - Math.Abs( Math.Atan( distance / z ).RadToDegree() );
          // end stupid trick
          double gripAngle = Math.Acos( (cAngle.Square() + Le.Square() - Ls.Square()) / (2.0 * Le * cAngle) ).RadToDegree();
+         // handle when z is bellow 0 by adding the correction angle
          double elbowToGround = z >= 0 ? gripAngle - removedAngle : gripAngle + removedAngle;
          AnglesToPwms( angleBase, shoulderAngle, elbowToGround );
       }
 
-      private void AnglesToPwms( double baseAngle, double shoulderAngle, double elbowAngle )
+      private void AnglesToPwms( double baseAngle, double shoulderAngle, double gripToPlaneAngle )
       {
          double basePwm = m_Configuration.AngleToPwmForBase( baseAngle );
          double shoulderPwm = m_Configuration.AngleToPwmForShoulder( shoulderAngle );
-         double elbowPwm = m_Configuration.AngleToPwmForElbow( elbowAngle );
+         double elbowPwm = m_Configuration.AngleToPwmForElbow( gripToPlaneAngle );
          byte[] message = new byte[ 0 ];
          message = message.
             Concat( CommandToMessage( c_BaseIndex, (int) Math.Round( basePwm ) ) ).
