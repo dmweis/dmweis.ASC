@@ -27,17 +27,18 @@ namespace dmweis.ASC.Connector
          };
          m_Arduino.Open();
       }
-      public void MoveToCartesian( double x, double y, double z )
+      public void MoveToCartesian( double x, double yOrigin, double z )
       {
          double Le = m_Configuration.ElbowLength;
          double Ls = m_Configuration.ShoulderLength;
 
          // base angle
-         double angleBase = Math.Atan( x / y ).RadToDegree();
+         double angleBase = Math.Atan( x / yOrigin ).RadToDegree();
+         double yOffset = Math.Sqrt( x.Square() + yOrigin.Square() );
 
          // shoulder angle
-         double bottomAngle = Math.Atan( z / y ).RadToDegree();
-         double cAngle = Math.Sqrt( z.Square() + y.Square() );
+         double bottomAngle = Math.Atan( z / yOffset ).RadToDegree();
+         double cAngle = Math.Sqrt( z.Square() + yOffset.Square() );
          double upperAngle = Math.Acos( (Ls.Square() + cAngle.Square() - Le.Square()) / (2.0 * Ls * cAngle) ).RadToDegree();
          double shoulderAngle = bottomAngle + upperAngle;
 
@@ -45,7 +46,14 @@ namespace dmweis.ASC.Connector
          double elbowAngle = Math.Acos( (Le.Square() + Ls.Square() - cAngle.Square()) / (2.0 * Le * Ls) ).RadToDegree();
 
          // elbow to ground angle
-         double elbowToGround = Math.Acos( (cAngle.Square() + Le.Square() - Ls.Square()) / (2.0 * Le * cAngle) ).RadToDegree() - (90.0 - Math.Atan( y / z ).RadToDegree());
+         double removedAngle = 90.0 - Math.Atan( yOffset / z ).RadToDegree();
+         // stupid trick
+         if( z < 0.0 )
+         {
+            removedAngle = 180 - removedAngle;
+         }
+         // end stupid trick
+         double elbowToGround = Math.Acos( (cAngle.Square() + Le.Square() - Ls.Square()) / (2.0 * Le * cAngle) ).RadToDegree() - removedAngle;
          AnglesToPwms( angleBase, shoulderAngle, elbowToGround );
       }
 
