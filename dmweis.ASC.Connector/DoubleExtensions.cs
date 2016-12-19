@@ -22,5 +22,10 @@ namespace dmweis.ASC.Connector
       {
          return @this * @this;
       }
+
+      public static int RoundToInt( this double @this )
+      {
+         return (int) Math.Round( @this );
+      }
    }
 }

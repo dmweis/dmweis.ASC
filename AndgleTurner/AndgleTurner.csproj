@@ -53,6 +53,10 @@
       <Project>{248e7742-4733-4745-9c3c-1b48adfd9056}</Project>
       <Name>dmweis.ASC.Connector</Name>
     </ProjectReference>
+    <ProjectReference Include="..\XboxController\XboxController.csproj">
+      <Project>{12490721-e52c-49eb-b7fc-3422ec5e7bcd}</Project>
+      <Name>XboxController</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

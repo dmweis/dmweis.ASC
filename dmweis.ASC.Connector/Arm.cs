@@ -27,15 +27,21 @@ namespace dmweis.ASC.Connector
          };
          m_Arduino.Open();
       }
-      public void MoveToCartesian( double x, double y, double z )
+
+      public Task<bool> MoveToCartesianAsync( ArmPosition position )
+      {
+         return MoveToCartesianAsync( position.X, position.Y, position.Z );
+      }
+
+      public async Task<bool> MoveTo2DCartesianAsync( double angleBase, double distance, double z )
       {
          double Le = m_Configuration.ElbowLength;
          double Ls = m_Configuration.ShoulderLength;
 
-         // base angle
-         // Use Atan2 to doctor for cases in which y is negative
-         double angleBase = Math.Atan2( x, y ).RadToDegree();
-         double distance = Math.Sqrt( x.Square() + y.Square() );
+         if( distance > Ls + Le )
+         {
+            return false;
+         }
 
          // shoulder angle
          double bottomAngle = Math.Atan( z / distance ).RadToDegree();
@@ -52,20 +58,85 @@ namespace dmweis.ASC.Connector
          double gripAngle = Math.Acos( (cAngle.Square() + Le.Square() - Ls.Square()) / (2.0 * Le * cAngle) ).RadToDegree();
          // handle when z is bellow 0 by adding the correction angle
          double elbowToGround = z >= 0 ? gripAngle - removedAngle : gripAngle + removedAngle;
-         AnglesToPwms( angleBase, shoulderAngle, elbowToGround );
+         await MoveToAnglesAsync( angleBase, shoulderAngle, elbowToGround );
+         return true;
       }
 
-      private void AnglesToPwms( double baseAngle, double shoulderAngle, double gripToPlaneAngle )
+      public async Task<bool> MoveToCartesianAsync( double x, double y, double z )
+      {
+         double Le = m_Configuration.ElbowLength;
+         double Ls = m_Configuration.ShoulderLength;
+
+         // base angle
+         // Use Atan2 to doctor for cases in which y is negative
+         double angleBase = Math.Atan2( x, y ).RadToDegree();
+         double distance = Math.Sqrt( x.Square() + y.Square() );
+
+         if( distance > Ls + Le )
+         {
+            return false;
+         }
+
+         // shoulder angle
+         double bottomAngle = Math.Atan( z / distance ).RadToDegree();
+         double cAngle = Math.Sqrt( z.Square() + distance.Square() );
+         double upperAngle = Math.Acos( (Ls.Square() + cAngle.Square() - Le.Square()) / (2.0 * Ls * cAngle) ).RadToDegree();
+         double shoulderAngle = bottomAngle + upperAngle;
+
+         // elbow angle
+         double elbowAngle = Math.Acos( (Le.Square() + Ls.Square() - cAngle.Square()) / (2.0 * Le * Ls) ).RadToDegree();
+
+         // elbow to ground angle
+         double removedAngle = 90.0 - Math.Abs( Math.Atan( distance / z ).RadToDegree() );
+         // end stupid trick
+         double gripAngle = Math.Acos( (cAngle.Square() + Le.Square() - Ls.Square()) / (2.0 * Le * cAngle) ).RadToDegree();
+         // handle when z is bellow 0 by adding the correction angle
+         double elbowToGround = z >= 0 ? gripAngle - removedAngle : gripAngle + removedAngle;
+         await MoveToAnglesAsync( angleBase, shoulderAngle, elbowToGround );
+         return true;
+      }
+
+      private Task MoveToAnglesAsync( double baseAngle, double shoulderAngle, double gripToPlaneAngle )
       {
          double basePwm = m_Configuration.AngleToPwmForBase( baseAngle );
          double shoulderPwm = m_Configuration.AngleToPwmForShoulder( shoulderAngle );
          double elbowPwm = m_Configuration.AngleToPwmForElbow( gripToPlaneAngle );
          byte[] message = new byte[ 0 ];
          message = message.
-            Concat( CommandToMessage( c_BaseIndex, (int) Math.Round( basePwm ) ) ).
-            Concat( CommandToMessage( c_ShoulderIndex, (int) Math.Round( shoulderPwm ) ) ).
-            Concat( CommandToMessage( c_ElbowIndex, (int) Math.Round( elbowPwm ) ) ).ToArray();
-         SendMessage( message ).Wait();
+            Concat( CommandToMessage( c_BaseIndex, basePwm.RoundToInt() ) ).
+            Concat( CommandToMessage( c_ShoulderIndex, shoulderPwm.RoundToInt() ) ).
+            Concat( CommandToMessage( c_ElbowIndex, elbowPwm.RoundToInt() ) ).ToArray();
+         return SendMessage( message );
+      }
+
+      public Task SetMagnet( bool on )
+      {
+         return SetServoAsync( on ? c_MagnetOn : c_MagnetOff, 300 );
+      }
+
+      public async Task<Arm> ExecuteScriptAsync( ArmScript script )
+      {
+         foreach( ArmCommand position in script.Movements )
+         {
+            await MoveToAsync( position );
+         }
+         return this;
+      } 
+
+      public async Task<Arm> MoveToAsync( ArmCommand position, bool ignoreTimeouts = false )
+      {
+         position.Executed = true;
+         if( !ignoreTimeouts )
+         {
+            await Task.Delay( position.WaitBefore );
+         }
+         
+         if( !ignoreTimeouts )
+         {
+            await Task.Delay( position.WaitAfter );
+         }
+         position.Executed = false;
+         return this;
       }
 
       private Task SetServoAsync( int servoIndex, int pwm )
@@ -85,69 +156,11 @@ namespace dmweis.ASC.Connector
          byteArray[ 2 ] = (byte) (pwm & 0xFF);
          return byteArray;
       }
+
       private Task SendMessage( byte[] message )
       {
          return m_Arduino.WriteBytesAsync( message );
       }
-
-      public Task SetMagnet( bool on )
-      {
-         return SetServoAsync( on ? c_MagnetOn : c_MagnetOff, 300 );
-      }
-
-      #region pwm commands
-      public async Task<Arm> ExecuteScriptAsync( ArmScript script )
-      {
-         foreach( ArmCommand position in script.Movements )
-         {
-            await MoveToAsync( position );
-         }
-         return this;
-      } 
-
-      public async Task<Arm> MoveToAsync( ArmCommand position, bool ignoreTimeouts = false )
-      {
-         position.Executed = true;
-         if( !ignoreTimeouts )
-         {
-            await Task.Delay( position.WaitBefore );
-         }
-         byte[] message = new byte[ 0 ];
-         if( position.Elbow != null )
-         {
-            byte[] movementCommand = CommandToMessage( c_ElbowIndex, position.Elbow.Value );
-            message = message.Concat( movementCommand ).ToArray();
-         }
-         if( position.Shoulder != null )
-         {
-            byte[] movementCommand = CommandToMessage( c_ShoulderIndex, position.Shoulder.Value );
-            message = message.Concat( movementCommand ).ToArray();
-         }
-         if( position.Base != null )
-         {
-            byte[] movementCommand = CommandToMessage( c_BaseIndex, position.Base.Value );
-            message = message.Concat( movementCommand ).ToArray();
-         }
-         if( position.Magnet == true )
-         {
-            byte[] movementCommand = CommandToMessage( c_MagnetOn, 300 );
-            message = message.Concat( movementCommand ).ToArray();
-         }
-         else if( position.Magnet == false )
-         {
-            byte[] movementCommand = CommandToMessage( c_MagnetOff, 300 );
-            message = message.Concat( movementCommand ).ToArray();
-         }
-         await SendMessage( message );
-         if( !ignoreTimeouts )
-         {
-            await Task.Delay( position.WaitAfter );
-         }
-         position.Executed = false;
-         return this;
-      }
-
-      #endregion
 
    }
 }

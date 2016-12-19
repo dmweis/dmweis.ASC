@@ -16,10 +16,9 @@ namespace dmweis.ASC.Connector
       public string Comment { get; set; }
       public int WaitBefore { get; set; }
       public int WaitAfter { get; set; }
-      public int? Base { get; set; }
-      public int? Shoulder { get; set; }
-      public int? Elbow { get; set; }
+      public ArmPosition Position { get; set; }
       public bool? Magnet { get; set; }
+
       private bool m_Executed;
       [XmlIgnore]
       public bool Executed
@@ -38,6 +37,11 @@ namespace dmweis.ASC.Connector
             m_Executed = value;
             RaisePropertyChanged();
          }
+      }
+
+      public ArmCommand()
+      {
+         Position = new ArmPosition();
       }
 
       private void RaisePropertyChanged( [CallerMemberName] string propertyName = "" )

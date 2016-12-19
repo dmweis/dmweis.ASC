@@ -15,12 +15,17 @@ namespace XboxController
 
       private Dictionary<string, bool> m_ButtonStates;
       private StickValues m_LastValues;
+      private int m_LastUpdate;
+
+      public int UpdateFrequency { get; set; }
 
       public event EventHandler<StickValues> ControllerChanged;
+      public event EventHandler<StickValues> ControllerUpdate;
       public event EventHandler<ButtonPressedEventArgs> ButtonPressed;
 
       public XboxControllerFactory()
       {
+         UpdateFrequency = 50;
          m_CancellationTokenSource = new CancellationTokenSource();
          m_ButtonStates = new Dictionary<string, bool>();
          m_LastValues = new StickValues();
@@ -36,13 +41,12 @@ namespace XboxController
             await Task.Delay( 20 );
             if( connectedController.IsConnected )
             {
-               StickValues newValues = new StickValues()
+               StickValues newValues = new StickValues( connectedController.ThumbLeftX, connectedController.ThumbLeftY, connectedController.ThumbRightX, connectedController.ThumbRightY );
+               if( m_LastUpdate < Environment.TickCount )
                {
-                  LeftX = connectedController.ThumbLeftX,
-                  LeftY = connectedController.ThumbLeftY,
-                  RightX = connectedController.ThumbRightX,
-                  RightY = connectedController.ThumbRightY
-               };
+                  m_LastUpdate = Environment.TickCount + UpdateFrequency;
+                  ControllerUpdate?.Invoke( this, newValues );
+               }
                if( newValues != m_LastValues )
                {
                   m_LastValues = newValues;

@@ -9,10 +9,27 @@ namespace XboxController
 {
    public class StickValues : IEquatable<StickValues>
    {
-      public double LeftX { get; set; }
-      public double LeftY { get; set; }
-      public double RightX { get; set; }
-      public double RightY { get; set; }
+
+      public double LeftX { get; private set; }
+      public double LeftY { get; private set; }
+      public double RightX { get; private set; }
+      public double RightY { get; private set; }
+
+      public StickValues()
+      {
+         LeftX = 0;
+         LeftY = 0;
+         RightX = 0;
+         RightY = 0;
+      }
+
+      public StickValues( double leftX, double leftY, double rightX, double rightY )
+      {
+         LeftX = leftX;
+         LeftY = leftY;
+         RightX = rightX;
+         RightY = rightY;
+      }
 
       public override int GetHashCode()
       {

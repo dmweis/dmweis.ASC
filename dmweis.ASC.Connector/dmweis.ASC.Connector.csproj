@@ -43,6 +43,7 @@
     <Compile Include="Arm.cs" />
     <Compile Include="ArmConfiguration.cs" />
     <Compile Include="ArmCommand.cs" />
+    <Compile Include="ArmPosition.cs" />
     <Compile Include="ArmScript.cs" />
     <Compile Include="DoubleExtensions.cs" />
     <Compile Include="SerialPortExtensions.cs" />

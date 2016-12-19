@@ -56,12 +56,12 @@ namespace dmweis.ASC
 
         private void Button_Click( object sender, RoutedEventArgs e )
         {
-            m_ServoController?.SetServo( 20, 300 );
+            m_ServoController?.SetServoAsync( 20, 300 );
         }
 
         private void Button_Click_1( object sender, RoutedEventArgs e )
         {
-            m_ServoController?.SetServo( 21, 300 );
+            m_ServoController?.SetServoAsync( 21, 300 );
         }
     }
 
@@ -145,7 +145,7 @@ namespace dmweis.ASC
 
         private void UpdateServpValue( int value )
         {
-            m_ServoController?.SetServo( ServoIndex, value );
+            m_ServoController?.SetServoAsync( ServoIndex, value );
         }
 
         private void NotifyPropertyChanged( [CallerMemberName] string propertyName = "" )
@@ -155,12 +155,12 @@ namespace dmweis.ASC
 
         private void Button_Click( object sender, RoutedEventArgs e )
         {
-            m_ServoController?.SetServo( 20, 300 );
+            m_ServoController?.SetServoAsync( 20, 300 );
         }
 
         private void Button_Click_1( object sender, RoutedEventArgs e )
         {
-            m_ServoController?.SetServo( 21, 300 );
+            m_ServoController?.SetServoAsync( 21, 300 );
         }
     }
 }
