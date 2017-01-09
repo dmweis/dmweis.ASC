@@ -6,6 +6,7 @@ namespace dmweis.ASC.Connector
    public class ArmConfiguration
    {
 
+      public double EndEffectorLength { get; set; }
       public double ShoulderLength { get; set; }
       public double ElbowLength { get; set; }
 

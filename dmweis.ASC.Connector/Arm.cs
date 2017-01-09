@@ -115,40 +115,6 @@ namespace dmweis.ASC.Connector
       }
 
       /// <summary>
-      /// Procedure to calculate angles for vertical servo positions
-      /// </summary>
-      /// <param name="distance"></param>
-      /// <param name="z"></param>
-      /// <returns></returns>
-      private VerticalServoPositions CalculateVerticalServoPositions( double distance, double z )
-      {
-         double Le = m_Configuration.ElbowLength;
-         double Ls = m_Configuration.ShoulderLength;
-
-         if( distance > Ls + Le )
-         {
-            throw new InvalidOperationException( "Distance is furthere than arm can reach" );
-         }
-
-         // shoulder angle
-         double bottomAngle = Math.Atan( z / distance ).RadToDegree();
-         double cAngle = Math.Sqrt( z.Square() + distance.Square() );
-         double upperAngle = Math.Acos( (Ls.Square() + cAngle.Square() - Le.Square()) / (2.0 * Ls * cAngle) ).RadToDegree();
-         double shoulderAngle = bottomAngle + upperAngle;
-
-         // elbow angle
-         double elbowAngle = Math.Acos( (Le.Square() + Ls.Square() - cAngle.Square()) / (2.0 * Le * Ls) ).RadToDegree();
-
-         // elbow to ground angle
-         double removedAngle = 90.0 - Math.Abs( Math.Atan( distance / z ).RadToDegree() );
-         // end stupid trick
-         double gripAngle = Math.Acos( (cAngle.Square() + Le.Square() - Ls.Square()) / (2.0 * Le * cAngle) ).RadToDegree();
-         // handle when z is bellow 0 by adding the correction angle
-         double elbowToGround = z >= 0 ? gripAngle - removedAngle : gripAngle + removedAngle;
-         return new VerticalServoPositions( shoulderAngle, elbowToGround );
-      }
-
-      /// <summary>
       /// procedure for calculating servo angles for a position
       /// </summary>
       /// <param name="x"></param>
@@ -164,6 +130,41 @@ namespace dmweis.ASC.Connector
          return new ServoPositions( angleBase, verticalServoPositions.Shoulder, verticalServoPositions.Elbow );
       }
 
+      /// <summary>
+      /// Procedure to calculate angles for vertical servo positions
+      /// </summary>
+      /// <param name="distance"></param>
+      /// <param name="z"></param>
+      /// <returns></returns>
+      private VerticalServoPositions CalculateVerticalServoPositions( double distance, double z )
+      {
+         double Le = m_Configuration.ElbowLength;
+         double Ls = m_Configuration.ShoulderLength;
+         double endEffectorLenght = m_Configuration.EndEffectorLength;
+         double distanceWithouthEndEffector = distance - endEffectorLenght;
+
+         if( distanceWithouthEndEffector > Ls + Le )
+         {
+            throw new InvalidOperationException( "Distance is furthere than arm can reach" );
+         }
+
+         // shoulder angle
+         double bottomAngle = Math.Atan( z / distanceWithouthEndEffector ).RadToDegree();
+         double cAngle = Math.Sqrt( z.Square() + distanceWithouthEndEffector.Square() );
+         double upperAngle = Math.Acos( (Ls.Square() + cAngle.Square() - Le.Square()) / (2.0 * Ls * cAngle) ).RadToDegree();
+         double shoulderAngle = bottomAngle + upperAngle;
+
+         // elbow angle
+         double elbowAngle = Math.Acos( (Le.Square() + Ls.Square() - cAngle.Square()) / (2.0 * Le * Ls) ).RadToDegree();
+
+         // elbow to ground angle
+         double removedAngle = 90.0 - Math.Abs( Math.Atan( distanceWithouthEndEffector / z ).RadToDegree() );
+         // end stupid trick
+         double gripAngle = Math.Acos( (cAngle.Square() + Le.Square() - Ls.Square()) / (2.0 * Le * cAngle) ).RadToDegree();
+         // handle when z is bellow 0 by adding the correction angle
+         double elbowToGround = z >= 0 ? gripAngle - removedAngle : gripAngle + removedAngle;
+         return new VerticalServoPositions( shoulderAngle, elbowToGround );
+      }
 
       /// <summary>
       /// procedure to convert idel angles to current arm angles
