@@ -20,7 +20,7 @@ namespace AndgleTurner
       {
          Console.WriteLine( "starting" );
          XboxControllerFactory xbox = new XboxControllerFactory();
-         Arm arm = new Arm( "COM11", "default.xml" );
+         Arm arm = new Arm( "COM11", "direct.xml" );
          arm.SetMagnet( false );
          xbox.ControllerUpdate += ( sender, sticks ) =>
          {
