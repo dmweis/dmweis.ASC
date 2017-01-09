@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <ArmConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <EndEffectorLength>3</EndEffectorLength>
   <ShoulderLength>14.8</ShoulderLength>
   <ElbowLength>16</ElbowLength>
   <BaseMin>
