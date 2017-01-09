@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Arm.cs" />
     <Compile Include="ArmConfiguration.cs" />
+    <Compile Include="IArm.cs" />
     <Compile Include="Scriping\ArmCommand.cs" />
     <Compile Include="ArmPosition.cs" />
     <Compile Include="Scriping\ArmScript.cs" />

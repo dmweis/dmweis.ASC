@@ -6,7 +6,7 @@ using dmweis.ASC.Connector.Scriping;
 
 namespace dmweis.ASC.Connector
 {
-   public class Arm
+   public class Arm : IArm
    {
       private const int c_BaseIndex = 0;
       private const int c_ShoulderIndex = 1;
@@ -30,6 +30,64 @@ namespace dmweis.ASC.Connector
       public Task MoveToCartesianAsync( ArmPosition position )
       {
          return MoveToCartesianAsync( position.X, position.Y, position.Z );
+      }
+
+      /// <summary>
+      /// Main Cartesion move method
+      /// </summary>
+      /// <param name="x"></param>
+      /// <param name="y"></param>
+      /// <param name="z"></param>
+      /// <returns></returns>
+      public Task MoveToCartesianAsync( double x, double y, double z )
+      {
+         ServoPositions servoPositions = CalculateServosFromPosition( x, y, z );
+         ServoPositions convertedServoPositions = ConvertToAbsoluteServoAnglesOrPwm( servoPositions );
+         return MoveToConvertedAnglesOrPwm( convertedServoPositions );
+      }
+
+      /// <summary>
+      /// Main realtive move method
+      /// </summary>
+      /// <param name="baseAngle"></param>
+      /// <param name="distance"></param>
+      /// <param name="z"></param>
+      /// <returns></returns>
+      public Task MoveToRelative( double baseAngle, double distance, double z )
+      {
+         VerticalServoPositions verticalServoPositions = CalculateVerticalServoPositions( distance, z );
+         ServoPositions convertedServoAnglesOrPwm = ConvertToAbsoluteServoAnglesOrPwm( new ServoPositions( baseAngle, verticalServoPositions ) );
+         return MoveToConvertedAnglesOrPwm( convertedServoAnglesOrPwm );
+      }
+
+      public Task SetMagnet( bool on )
+      {
+         return SendMessage( SerializeCommand( on ? c_MagnetOn : c_MagnetOff, 300 ) );
+      }
+
+      public async Task<Arm> ExecuteScriptAsync( ArmScript script )
+      {
+         foreach( ArmCommand position in script.Movements )
+         {
+            await MoveToAsync( position );
+         }
+         return this;
+      }
+
+      public async Task<Arm> MoveToAsync( ArmCommand position, bool ignoreTimeouts = false )
+      {
+         position.Executed = true;
+         if( !ignoreTimeouts )
+         {
+            await Task.Delay( position.WaitBefore );
+         }
+
+         if( !ignoreTimeouts )
+         {
+            await Task.Delay( position.WaitAfter );
+         }
+         position.Executed = false;
+         return this;
       }
 
       /// <summary>
@@ -106,33 +164,6 @@ namespace dmweis.ASC.Connector
          return new ServoPositions( angleBase, verticalServoPositions.Shoulder, verticalServoPositions.Elbow );
       }
 
-      /// <summary>
-      /// Main Cartesion move method
-      /// </summary>
-      /// <param name="x"></param>
-      /// <param name="y"></param>
-      /// <param name="z"></param>
-      /// <returns></returns>
-      public Task MoveToCartesianAsync( double x, double y, double z )
-      {
-         ServoPositions servoPositions = CalculateServosFromPosition( x, y, z );
-         ServoPositions convertedServoPositions = ConvertToAbsoluteServoAnglesOrPwm( servoPositions );
-         return MoveToConvertedAnglesOrPwm( convertedServoPositions );
-      }
-
-      /// <summary>
-      /// Main realtive move method
-      /// </summary>
-      /// <param name="baseAngle"></param>
-      /// <param name="distance"></param>
-      /// <param name="z"></param>
-      /// <returns></returns>
-      public Task MoveToRelative( double baseAngle, double distance, double z )
-      {
-         VerticalServoPositions verticalServoPositions = CalculateVerticalServoPositions( distance, z );
-         ServoPositions convertedServoAnglesOrPwm = ConvertToAbsoluteServoAnglesOrPwm( new ServoPositions( baseAngle, verticalServoPositions ) );
-         return MoveToConvertedAnglesOrPwm( convertedServoAnglesOrPwm );
-      }
 
       /// <summary>
       /// procedure to convert idel angles to current arm angles
@@ -155,34 +186,14 @@ namespace dmweis.ASC.Connector
          return SendMessage( message );
       }
 
-      public Task SetMagnet( bool on )
+      /// <summary>
+      /// internal send methood
+      /// </summary>
+      /// <param name="message"></param>
+      /// <returns></returns>
+      private Task SendMessage( byte[] message )
       {
-         return  SendMessage( SerializeCommand( on ? c_MagnetOn : c_MagnetOff, 300 ) );
-      }
-
-      public async Task<Arm> ExecuteScriptAsync( ArmScript script )
-      {
-         foreach( ArmCommand position in script.Movements )
-         {
-            await MoveToAsync( position );
-         }
-         return this;
-      } 
-
-      public async Task<Arm> MoveToAsync( ArmCommand position, bool ignoreTimeouts = false )
-      {
-         position.Executed = true;
-         if( !ignoreTimeouts )
-         {
-            await Task.Delay( position.WaitBefore );
-         }
-         
-         if( !ignoreTimeouts )
-         {
-            await Task.Delay( position.WaitAfter );
-         }
-         position.Executed = false;
-         return this;
+         return m_Arduino.WriteBytesAsync( message );
       }
 
       private byte[] SerializeCommand( int servoIndex, int pwm )
@@ -192,11 +203,6 @@ namespace dmweis.ASC.Connector
          byteArray[ 1 ] = (byte) ((pwm >> 8) & 0xFF);
          byteArray[ 2 ] = (byte) (pwm & 0xFF);
          return byteArray;
-      }
-
-      private Task SendMessage( byte[] message )
-      {
-         return m_Arduino.WriteBytesAsync( message );
       }
    }
 }
