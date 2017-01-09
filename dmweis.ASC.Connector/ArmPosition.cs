@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace dmweis.ASC.Connector
 {
-   public class ArmPosition
+   public class Vector
    {
       public double X { get; set; }
       public double Y { get; set; }

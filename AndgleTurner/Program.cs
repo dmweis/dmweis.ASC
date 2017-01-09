@@ -27,7 +27,7 @@ namespace AndgleTurner
             baseAngle += Math.Round( (sticks.LeftX - 50.0) / 39.0 ) * 2;
             distance += Math.Round( (sticks.LeftY - 50.0) / 39.0 ) * 0.5;
             z += Math.Round( (sticks.RightY - 50.0) / 39.0 ) * 0.5;
-            arm.MoveTo2DCartesianAsync( baseAngle, distance, z ).Wait();
+            arm.MoveToRelative( baseAngle, distance, z ).Wait();
          };
          xbox.ButtonPressed += ( sender, buttonPress ) =>
          {

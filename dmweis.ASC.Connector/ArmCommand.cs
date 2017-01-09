@@ -16,7 +16,7 @@ namespace dmweis.ASC.Connector
       public string Comment { get; set; }
       public int WaitBefore { get; set; }
       public int WaitAfter { get; set; }
-      public ArmPosition Position { get; set; }
+      public Vector Position { get; set; }
       public bool? Magnet { get; set; }
 
       private bool m_Executed;
@@ -41,7 +41,7 @@ namespace dmweis.ASC.Connector
 
       public ArmCommand()
       {
-         Position = new ArmPosition();
+         Position = new Vector();
       }
 
       private void RaisePropertyChanged( [CallerMemberName] string propertyName = "" )
