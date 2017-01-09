@@ -7,9 +7,9 @@ namespace dmweis.ASC.Connector
 {
    static class SerialPortExtensions
    {
-      public static Task WriteBytesAsync( this SerialPort @this, byte[] array, CancellationToken cancelationToken )
+      public static Task WriteBytesAsync( this SerialPort @this, byte[] array, CancellationToken cancellationToken )
       {
-         return @this.BaseStream.WriteAsync( array, 0, array.Length );
+         return @this.BaseStream.WriteAsync( array, 0, array.Length, cancellationToken );
       }
 
       public static Task WriteBytesAsync( this SerialPort @this, byte[] array )
