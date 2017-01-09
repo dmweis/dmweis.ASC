@@ -32,22 +32,15 @@ void setup() {
 	Base.write(90, 10, true);
 	Shoulder.write(90, 10, true);
 	Elbow.write(90, 10, true);
-	Serial.println("Ready");
 }
 
 void loop() {
 	if (Serial.available() > 2)
 	{
-		/*byte index = Serial.read();
+		byte index = Serial.read();
 		byte high = Serial.read();
 		byte low = Serial.read();
-		uint16_t pulsWidth = (high << 8) | low;*/
-		int index = Serial.parseInt();
-		int pulsWidth = Serial.parseInt();
-		Serial.print("Index: ");
-		Serial.print(index);
-		Serial.print(" angle: ");
-		Serial.println(pulsWidth);
+		uint16_t pulsWidth = (high << 8) | low;
 		switch (index)
 		{
 		case baseIndex:
