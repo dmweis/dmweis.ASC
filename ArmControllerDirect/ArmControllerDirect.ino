@@ -6,36 +6,65 @@
 
 #include <VarSpeedServo.h>
 
-VarSpeedServo myservo;    // create servo object to control a servo
+const int magnetPin = 8;
+const int baseServoPin = 6;
+const int shoulderServoPin = 3;
+const int elbowServoPin = 5;
+
+const byte baseIndex = 0;
+const byte shoulderIndex = 1;
+const byte elbowIndex = 2;
+
+VarSpeedServo Base;
+VarSpeedServo Shoulder;
+VarSpeedServo Elbow;
 
 
-// the setup function runs once when you press reset or power the board
 void setup() {
-	myservo.attach(9);  // attaches the servo on pin 9 to the servo object
+	pinMode(magnetPin, OUTPUT);
+	digitalWrite(magnetPin, LOW);
+	Base.attach(baseServoPin);
+	Shoulder.attach(shoulderServoPin);
+	Elbow.attach(elbowServoPin);
 	Serial.begin(9600);
+	while (!Serial);
+
+	Base.write(90, 10, true);
+	Shoulder.write(90, 10, true);
+	Elbow.write(90, 10, true);
+	Serial.println("Ready");
 }
 
-// the loop function runs over and over again until power down or reset
 void loop() {
-	//myservo.write(180, 10, true);        // move to 180 degrees, use a speed of 30, wait until move is complete
-	//myservo.write(0, 255, true);        // move to 0 degrees, use a speed of 30, wait until move is complete
-	if (Serial.available() > 1)
+	if (Serial.available() > 2)
 	{
-		int pos = Serial.parseInt();
-		int speed = Serial.parseInt();
-		Serial.print("position: ");
-		Serial.print(pos);
-		Serial.print(" speed: ");
-		Serial.println(speed);
-		myservo.write(pos, speed);
-		int currentPos = -1;
-		while (currentPos != pos)
+		/*byte index = Serial.read();
+		byte high = Serial.read();
+		byte low = Serial.read();
+		uint16_t pulsWidth = (high << 8) | low;*/
+		int index = Serial.parseInt();
+		int pulsWidth = Serial.parseInt();
+		Serial.print("Index: ");
+		Serial.print(index);
+		Serial.print(" angle: ");
+		Serial.println(pulsWidth);
+		switch (index)
 		{
-			currentPos = myservo.read();
-			Serial.print("Current position: ");
-			Serial.println(currentPos);
-			delay(50);
+		case baseIndex:
+			Base.write(pulsWidth, 10);
+			break;
+		case shoulderIndex:
+			Shoulder.write(pulsWidth, 10);
+			break;
+		case elbowIndex:
+			Elbow.write(pulsWidth, 10);
+			break;
+		case 20:
+			digitalWrite(magnetPin, HIGH);
+			break;
+		case 21:
+			digitalWrite(magnetPin, LOW);
+			break;
 		}
-		Serial.println("Done");
 	}
 }
