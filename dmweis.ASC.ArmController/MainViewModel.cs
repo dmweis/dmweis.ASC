@@ -150,7 +150,7 @@ namespace dmweis.ASC.ArmController
 
       private void EstablisheConnection()
       {
-         m_Arm = new Arm( m_SelectedPort );
+         m_Arm = new Arm( m_SelectedPort, "" );
          PortSelectionOpen = false;
       }
 
