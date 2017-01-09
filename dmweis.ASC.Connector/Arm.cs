@@ -141,6 +141,7 @@ namespace dmweis.ASC.Connector
          double Le = m_Configuration.ElbowLength;
          double Ls = m_Configuration.ShoulderLength;
          double endEffectorLenght = m_Configuration.EndEffectorLength;
+         // Remove end effector lenght from the relative distance
          double distanceWithouthEndEffector = distance - endEffectorLenght;
 
          if( distanceWithouthEndEffector > Ls + Le )
