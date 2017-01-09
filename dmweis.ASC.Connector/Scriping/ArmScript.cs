@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace dmweis.ASC.Connector
+namespace dmweis.ASC.Connector.Scriping
 {
    public class ArmScript
    {

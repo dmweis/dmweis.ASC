@@ -1,14 +1,10 @@
 ﻿using dmweis.ASC.Connector;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO.Ports;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using dmweis.ASC.Connector.Scriping;
+
 
 namespace dmweis.ASC.ArmController
 {

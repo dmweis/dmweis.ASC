@@ -42,12 +42,11 @@
   <ItemGroup>
     <Compile Include="Arm.cs" />
     <Compile Include="ArmConfiguration.cs" />
-    <Compile Include="ArmCommand.cs" />
+    <Compile Include="Scriping\ArmCommand.cs" />
     <Compile Include="ArmPosition.cs" />
-    <Compile Include="ArmScript.cs" />
+    <Compile Include="Scriping\ArmScript.cs" />
     <Compile Include="DoubleExtensions.cs" />
     <Compile Include="SerialPortExtensions.cs" />
-    <Compile Include="ServoController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServoPositions.cs" />
     <Compile Include="VerticalServoPositions.cs" />

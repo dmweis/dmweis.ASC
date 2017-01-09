@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using dmweis.ASC.Connector.Scriping;
 
 namespace dmweis.ASC.Connector
 {
@@ -28,7 +27,7 @@ namespace dmweis.ASC.Connector
          m_Arduino.Open();
       }
 
-      public Task MoveToCartesianAsync( Vector position )
+      public Task MoveToCartesianAsync( ArmPosition position )
       {
          return MoveToCartesianAsync( position.X, position.Y, position.Z );
       }

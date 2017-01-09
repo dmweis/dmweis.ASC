@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace dmweis.ASC.Connector
+namespace dmweis.ASC.Connector.Scriping
 {
    public class ArmCommand : INotifyPropertyChanged
    {
@@ -16,7 +11,7 @@ namespace dmweis.ASC.Connector
       public string Comment { get; set; }
       public int WaitBefore { get; set; }
       public int WaitAfter { get; set; }
-      public Vector Position { get; set; }
+      public ArmPosition Position { get; set; }
       public bool? Magnet { get; set; }
 
       private bool m_Executed;
@@ -41,7 +36,7 @@ namespace dmweis.ASC.Connector
 
       public ArmCommand()
       {
-         Position = new Vector();
+         Position = new ArmPosition();
       }
 
       private void RaisePropertyChanged( [CallerMemberName] string propertyName = "" )
