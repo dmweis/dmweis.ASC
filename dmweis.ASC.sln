@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XboxController", "XboxContr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XboxControllerTestConsole", "XboxControllerTestConsole\XboxControllerTestConsole.csproj", "{5DF3AE12-5C67-4E0A-8FF3-20D781145FF5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AndgleTurner", "AndgleTurner\AndgleTurner.csproj", "{0B9EDB36-C507-4313-920A-2EB363C27408}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTestApp", "AndgleTurner\ConsoleTestApp.csproj", "{0B9EDB36-C507-4313-920A-2EB363C27408}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ArmControllerDirect", "ArmControllerDirect\ArmControllerDirect.vcxproj", "{C5F80730-F44F-4478-BDAE-6634EFC2CA88}"
 EndProject
