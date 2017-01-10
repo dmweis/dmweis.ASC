@@ -9,6 +9,7 @@ namespace dmweis.ASC.ArmController
    class ArmControllerViewModel : ViewModelBase
    {
       private IArm m_Arm;
+      private bool m_SendingCommand;
 
       public ICommand RefreshPortsCommand { get; }
       public RelayCommand ConnectCommand { get; }
@@ -43,7 +44,12 @@ namespace dmweis.ASC.ArmController
 
       private async void ArmCommand(Position position)
       {
-         await m_Arm.MoveToCartesianAsync( position.X, position.Y, position.Z );
+         if (!m_SendingCommand)
+         {
+            m_SendingCommand = true;
+            await m_Arm.MoveToCartesianAsync( position.X, position.Y, position.Z );
+            m_SendingCommand = false;
+         }
       }
    }
 }

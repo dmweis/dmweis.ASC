@@ -24,7 +24,9 @@ namespace dmweis.ASC.ArmController
       private readonly Line _line;
       private readonly Ellipse _ArmCircle;
       private readonly Ellipse _EndEffector;
+      private readonly TextBlock _CoordinatesLabel;
       private Point _lastSentPosition;
+      private double _lastSentZ;
 
       public ArmControllerView()
       {
@@ -38,8 +40,8 @@ namespace dmweis.ASC.ArmController
          {
             Stroke = Brushes.Red,
             StrokeThickness = 1,
-            Width = 70,
-            Height = 70
+            Width = 120,
+            Height = 120
          };
          _EndEffector = new Ellipse
          {
@@ -48,9 +50,14 @@ namespace dmweis.ASC.ArmController
             Width = 20,
             Height = 20
          };
+         _CoordinatesLabel = new TextBlock()
+         {
+            Visibility = Visibility.Collapsed
+         };
          ArmCanvas.Children.Add(_line);
          ArmCanvas.Children.Add( _ArmCircle );
          ArmCanvas.Children.Add( _EndEffector );
+         ArmCanvas.Children.Add(_CoordinatesLabel);
          _lastSentPosition = new Point(0, 0);
       }
 
@@ -59,6 +66,10 @@ namespace dmweis.ASC.ArmController
          
          if (e.LeftButton == MouseButtonState.Pressed)
          {
+            if (_CoordinatesLabel.Visibility == Visibility.Collapsed)
+            {
+               _CoordinatesLabel.Visibility = Visibility.Visible;
+            }
             Point position = e.GetPosition( ArmCanvas );
             Point relativePosition = new Point();
             relativePosition.X = 100 / ArmCanvas.ActualWidth * position.X - 50;
@@ -68,6 +79,8 @@ namespace dmweis.ASC.ArmController
             _line.Y2 = position.Y;
             Canvas.SetLeft(_EndEffector, position.X - 10);
             Canvas.SetTop(_EndEffector, position.Y - 10);
+            Canvas.SetLeft( _CoordinatesLabel, position.X + 15 );
+            Canvas.SetTop( _CoordinatesLabel, position.Y - 30 );
          }
       }
 
@@ -84,6 +97,8 @@ namespace dmweis.ASC.ArmController
             _line.Y2 = position.Y;
             Canvas.SetLeft( _EndEffector, position.X - 10 );
             Canvas.SetTop( _EndEffector, position.Y - 10 );
+            Canvas.SetLeft( _CoordinatesLabel, position.X + 15 );
+            Canvas.SetTop( _CoordinatesLabel, position.Y - 30 );
          }
       }
 
@@ -95,6 +110,8 @@ namespace dmweis.ASC.ArmController
             Point relativePosition = new Point();
             relativePosition.X = 100 / ArmCanvas.ActualWidth * position.X - 50;
             relativePosition.Y = -50 / ArmCanvas.ActualHeight * position.Y + 50;
+            Canvas.SetLeft( _CoordinatesLabel, position.X + 15 );
+            Canvas.SetTop( _CoordinatesLabel, position.Y - 30 );
             CheckMoveArm( relativePosition, true );
          }
       }
@@ -104,8 +121,8 @@ namespace dmweis.ASC.ArmController
          Point bottomMiddle = new Point();
          bottomMiddle.X = ArmCanvas.ActualWidth / 2;
          bottomMiddle.Y = ArmCanvas.ActualHeight;
-         Canvas.SetTop(_ArmCircle, bottomMiddle.Y - 35);
-         Canvas.SetLeft(_ArmCircle, bottomMiddle.X - 35);
+         Canvas.SetTop(_ArmCircle, bottomMiddle.Y - _ArmCircle.ActualHeight/2);
+         Canvas.SetLeft(_ArmCircle, bottomMiddle.X - _ArmCircle.ActualWidth/2);
          _line.X1 = bottomMiddle.X;
          _line.Y1 = bottomMiddle.Y;
       }
@@ -114,11 +131,25 @@ namespace dmweis.ASC.ArmController
       {
          double x = 25.0 / 50.0 * relativePosition.X;
          double y = 25.0 / 50.0 * relativePosition.Y;
-         if ( ignoreCheck || Point.Subtract( _lastSentPosition, new Point( x, y ) ).Length > 0.4 )
+         _CoordinatesLabel.Text = $"X: {x:F} \nY: {y:F}";
+         if( ignoreCheck || Point.Subtract( _lastSentPosition, new Point( x, y ) ).Length > 0.4 )
          {
-            (DataContext as ArmControllerViewModel).MoveArmCommand.Execute( new Position(x, y, 0) );
+            (DataContext as ArmControllerViewModel)?.MoveArmCommand.Execute( new Position(x, y, _lastSentZ ) );
             _lastSentPosition = new Point(x, y);
          }
+      }
+
+      private void RangeBase_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+      {
+         double newValueAdjusted = e.NewValue / 5.0;
+         if (Math.Abs( _lastSentZ - newValueAdjusted) > 0.4)
+         {
+            Position newPosition = new Position(_lastSentPosition.X, _lastSentPosition.Y, newValueAdjusted );
+            ( DataContext as ArmControllerViewModel)?.MoveArmCommand.Execute( newPosition );
+            _lastSentZ = newValueAdjusted;
+            ZValueTextBox.Text = $"Z: {newValueAdjusted:F}";
+         }
+
       }
    }
 }
