@@ -4,67 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:dmweis.ASC"
+        xmlns:armController="clr-namespace:dmweis.ASC.ArmController"
         mc:Ignorable="d"
-
-        Title="MainWindow" Height="350" Width="1000">
-    <StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Index: " Margin="20, 0, 5, 0"/>
-            <TextBox Name="ServoIndex" Width="40" Margin="5, 0"/>
-            <Button Content="Add servo" Margin="5, 0" Click="AddServoButton" Tag="{Binding ElementName=ServoIndex, Path=Text, UpdateSourceTrigger=PropertyChanged}"/>
-        </StackPanel>
-        <ItemsControl Name="ServoCollectionView">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Grid VerticalAlignment="Center" Margin="10" HorizontalAlignment="Stretch">
-                        <Grid.Resources>
-                            <Style TargetType="{x:Type DockPanel}">
-                                <Setter Property="Margin" Value="10, 0"/>
-                            </Style>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                            <Style TargetType="{x:Type TextBox}">
-                                <Setter Property="Padding" Value="5, 1"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </Grid.Resources>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="300"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <DockPanel Grid.Column="0">
-                            <TextBlock DockPanel.Dock="Left" Text="Name: "/>
-                            <TextBox DockPanel.Dock="Right" Text="{Binding Name}"/>
-                        </DockPanel>
-                        <DockPanel Grid.Column="1">
-                            <TextBlock DockPanel.Dock="Left" Text="value: "/>
-                            <TextBox DockPanel.Dock="Right" Text="{Binding Value}"/>
-                        </DockPanel>
-                        <Slider Grid.Column="2" VerticalAlignment="Center" Minimum="{Binding Minimum}" Maximum="{Binding Maximum}" Value="{Binding Value, Mode=TwoWay}" TickFrequency="1" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True"/>
-                        <DockPanel Grid.Column="3">
-                            <TextBlock DockPanel.Dock="Left" Text="Minimum: "/>
-                            <TextBox DockPanel.Dock="Right" Text="{Binding Minimum}"/>
-                        </DockPanel>
-                        <DockPanel Grid.Column="4">
-                            <TextBlock DockPanel.Dock="Left" Text="Maximum: "/>
-                            <TextBox DockPanel.Dock="Right" Text="{Binding Maximum}"/>
-                        </DockPanel>
-                        <DockPanel Grid.Column="5">
-                            <TextBlock DockPanel.Dock="Left" Text="Servo index: "/>
-                            <TextBox DockPanel.Dock="Right" Text="{Binding ServoIndex}"/>
-                        </DockPanel>
-                        <Button Grid.Column="6" Content="Remove Servo" Click="RemoveServoButton" Tag="{Binding Name}"/>
-                    </Grid>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-        <Button Content="Magnet on" Click="Button_Click"/>
-        <Button Content="Magnet off" Click="Button_Click_1"/>
-    </StackPanel>
+        Title="MainWindow"
+        Height="350"
+        Width="1000">
+   <Window.Resources>
+      <DataTemplate DataType="{x:Type armController:ArmControllerViewModel}">
+         <armController:ArmControllerView/>
+      </DataTemplate>
+   </Window.Resources>
+   <ContentPresenter Content="{Binding CurrentViewModel}"/>
 </Window>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace dmweis.ASC.Connector
 {
-   interface IArm
+   public interface IArm
    {
       Task MoveToCartesianAsync( ArmPosition position  );
       Task MoveToCartesianAsync( double x, double y, double z );
