@@ -26,14 +26,6 @@ namespace dmweis.ASC.Connector
             DtrEnable = false
          };
          m_Arduino.Open();
-         Task.Factory.StartNew( () =>
-         {
-            m_Arduino.Encoding = Encoding.ASCII;
-            while( true )
-            {
-               System.Diagnostics.Debug.WriteLine( m_Arduino.ReadLine() );
-            }
-         } );
       }
 
       public Task MoveToCartesianAsync( ArmPosition position )
@@ -71,6 +63,7 @@ namespace dmweis.ASC.Connector
 
       public Task SetMagnet( bool on )
       {
+         // 2 is the command number
          return SendMessage( new byte[] { 2, (byte) (on ? 1 : 0) } );
       }
 
@@ -208,7 +201,7 @@ namespace dmweis.ASC.Connector
       private byte[] SerializeFullServoCommand( ServoPositions servoPwmOrAngles )
       {
          byte[] byteArray = new byte[ 7 ];
-         byteArray[ 0 ] = 1;
+         byteArray[ 0 ] = 1; // command number
          int pwm = servoPwmOrAngles.Base.RoundToInt();
          byteArray[ 1 ] = (byte) ((pwm >> 8) & 0xFF);
          byteArray[ 2 ] = (byte) (pwm & 0xFF);
@@ -224,7 +217,7 @@ namespace dmweis.ASC.Connector
       private byte[] SerializeSingleServoCommand( int servoIndex, int pwm )
       {
          byte[] byteArray = new byte[ 4 ];
-         byteArray[ 0 ] = 0; // command
+         byteArray[ 0 ] = 0; // command number
          byteArray[ 1 ] = (byte) servoIndex;
          byteArray[ 2 ] = (byte) ((pwm >> 8) & 0xFF);
          byteArray[ 3 ] = (byte) (pwm & 0xFF);
