@@ -14,11 +14,11 @@ const byte baseIndex = 0;
 const uint16_t baseMin = 100;
 const uint16_t baseMax = 600;
 
-const byte shoulderIndex = 1;
+const byte ShoulderIndex = 1;
 const uint16_t shoulderMin = 100;
 const uint16_t shoulderMax = 600;
 
-const byte elbowIndex = 2;
+const byte ElbowIndex = 2;
 const uint16_t elbowMin = 100;
 const uint16_t elbowMax = 600;
 
@@ -73,10 +73,10 @@ void ReadServoCommands() {
 		case baseIndex:
 			DesiredBaseAngle = constrain(desiredAngle, baseMin, baseMax);
 			break;
-		case shoulderIndex:
+		case ShoulderIndex:
 			DesiredShoulderAngle = constrain(desiredAngle, shoulderMin, shoulderMax);
 			break;
-		case elbowIndex:
+		case ElbowIndex:
 			DesiredElbowAngle = constrain(desiredAngle, elbowMin, elbowMax);
 			break;
 		}
@@ -93,8 +93,8 @@ void UpdateServos() {
 
 void SetServoValues() {
 	pwmController.setPWM(baseIndex, 0, CurrentBaseAngle);
-	pwmController.setPWM(shoulderIndex, 0, CurrentShoulderAngle);
-	pwmController.setPWM(elbowIndex, 0, CurrentElbowAngle);
+	pwmController.setPWM(ShoulderIndex, 0, CurrentShoulderAngle);
+	pwmController.setPWM(ElbowIndex, 0, CurrentElbowAngle);
 }
 
 void UpdateServoValues() {
