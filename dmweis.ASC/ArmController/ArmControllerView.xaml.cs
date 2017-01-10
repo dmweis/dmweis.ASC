@@ -129,8 +129,8 @@ namespace dmweis.ASC.ArmController
 
       private void CheckMoveArm(Point relativePosition, bool ignoreCheck = false)
       {
-         double x = 25.0 / 50.0 * relativePosition.X;
-         double y = 25.0 / 50.0 * relativePosition.Y;
+         double x = 35.0 / 50.0 * relativePosition.X;
+         double y = 35.0 / 50.0 * relativePosition.Y;
          _CoordinatesLabel.Text = $"X: {x:F} \nY: {y:F}";
          if( ignoreCheck || Point.Subtract( _lastSentPosition, new Point( x, y ) ).Length > 0.4 )
          {
