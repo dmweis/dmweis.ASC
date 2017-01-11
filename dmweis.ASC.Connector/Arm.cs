@@ -1,9 +1,7 @@
 ﻿using System;
 using System.IO.Ports;
-using System.Linq;
 using System.Threading.Tasks;
 using dmweis.ASC.Connector.Scriping;
-using System.Text;
 
 namespace dmweis.ASC.Connector
 {
