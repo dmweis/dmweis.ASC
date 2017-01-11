@@ -22,13 +22,14 @@
                  MouseDown="ArmCanvas_OnMouseDown"
                  MouseUp="ArmCanvas_OnMouseUp"
                  MouseMove="ArmCanvas_OnMouseMove"
-                 SizeChanged="ArmCanvas_OnSizeChanged">
+                 SizeChanged="ArmCanvas_OnSizeChanged"
+                 MouseWheel="ArmCanvas_OnMouseWheel">
             <Canvas.Background>
                <SolidColorBrush Color="White" Opacity="0"/>
             </Canvas.Background>
          </Canvas>
       </Border>
-      <!-- arm height scroll -->
+      <!-- right panel -->
       <Grid Grid.Column="2">
          <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
@@ -37,14 +38,16 @@
          <TextBlock Grid.Row="0"
                  x:Name="ZValueTextBox"
                  Text="Z: 0.00"/>
-         <Slider Grid.Row="1"
+         <Slider x:Name="ArmSlider"
+              Grid.Row="1"
               Maximum="50"
               Minimum="-50"
               Orientation="Vertical"
               TickFrequency="1"
               TickPlacement="Both"
               ValueChanged="RangeBase_OnValueChanged"
-              IsMoveToPointEnabled="True"/>
+              IsMoveToPointEnabled="True"
+              MouseWheel="ArmCanvas_OnMouseWheel"/>
       </Grid>
    </Grid>
 </UserControl>

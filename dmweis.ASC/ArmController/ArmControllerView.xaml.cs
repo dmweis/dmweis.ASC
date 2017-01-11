@@ -151,5 +151,11 @@ namespace dmweis.ASC.ArmController
          }
 
       }
+
+      private void ArmCanvas_OnMouseWheel(object sender, MouseWheelEventArgs e)
+      {
+         ArmSlider.Value += e.Delta / 240.0;
+         System.Diagnostics.Debug.WriteLine(e.Delta / 240.0 );
+      }
    }
 }
