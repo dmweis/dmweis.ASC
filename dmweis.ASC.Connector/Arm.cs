@@ -69,24 +69,28 @@ namespace dmweis.ASC.Connector
       {
          foreach( ArmCommand position in script.Movements )
          {
-            await MoveToAsync( position );
+            await ExecuteCommand( position );
          }
          return this;
       }
 
-      public async Task<Arm> MoveToAsync( ArmCommand position, bool ignoreTimeouts = false )
+      public async Task<Arm> ExecuteCommand( ArmCommand command, bool ignoreTimeouts = false )
       {
-         position.Executed = true;
+         command.Executed = true;
          if( !ignoreTimeouts )
          {
-            await Task.Delay( position.WaitBefore );
+            await Task.Delay( command.WaitBefore );
          }
-
+         if (command.Magnet.HasValue)
+         {
+            await SetMagnet(command.Magnet.Value);
+         }
+         await MoveToCartesianAsync(command.Position);
          if( !ignoreTimeouts )
          {
-            await Task.Delay( position.WaitAfter );
+            await Task.Delay( command.WaitAfter );
          }
-         position.Executed = false;
+         command.Executed = false;
          return this;
       }
 

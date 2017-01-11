@@ -23,7 +23,7 @@ namespace dmweis.ASC.Connector.Scriping
          return script;
       }
 
-      public static void WriteArmScript( string path, ArmScript script )
+      public static void SaveArmScript( string path, ArmScript script )
       {
          using( FileStream file = File.Create( path ) )
          {
