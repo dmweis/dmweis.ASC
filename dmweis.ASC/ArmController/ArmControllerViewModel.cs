@@ -12,8 +12,17 @@ namespace dmweis.ASC.ArmController
       private MainWindowViewModel m_MainViewModel;
       private bool m_SendingCommand;
 
-      
+      private bool m_MagnetOn;
+
+      public bool MagnetOn
+      {
+         get { return m_MagnetOn; }
+         set { Set( () => MagnetOn, ref m_MagnetOn, value); }
+      }
+
+
       public RelayCommand<Position> MoveArmCommand { get; }
+      public RelayCommand SwitchMagnetCommand { get; }
 
       public SerialPortAddress SelectedPort { get; set; }
 
@@ -21,6 +30,18 @@ namespace dmweis.ASC.ArmController
       {
          m_MainViewModel = mainWindowViewModel;
          MoveArmCommand = new RelayCommand<Position>( ArmCommand );
+         SwitchMagnetCommand = new RelayCommand( SwitchMagnet );
+      }
+
+      private async void SwitchMagnet()
+      {
+         if( m_MainViewModel.Arm != null && !m_SendingCommand )
+         {
+            m_SendingCommand = true;
+            MagnetOn = !MagnetOn;
+            await m_MainViewModel.Arm.SetMagnet( MagnetOn );
+            m_SendingCommand = false;
+         }
       }
 
       private async void ArmCommand(Position position)

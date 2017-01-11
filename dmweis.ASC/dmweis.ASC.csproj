@@ -88,6 +88,7 @@
     </Compile>
     <Compile Include="ArmController\ArmControllerViewModel.cs" />
     <Compile Include="ArmController\Position.cs" />
+    <Compile Include="Converters\BoolToValueConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

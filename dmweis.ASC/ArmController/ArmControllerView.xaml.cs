@@ -12,9 +12,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using dmweis.ASC.Converters;
 
 namespace dmweis.ASC.ArmController
 {
+   class BoolToColorConverter : BoolToValueConverter<Brush> { }
    /// <summary>
    /// Interaction logic for ArmControllerView.xaml
    /// </summary>
@@ -63,7 +65,6 @@ namespace dmweis.ASC.ArmController
 
       private void ArmCanvas_OnMouseDown(object sender, MouseButtonEventArgs e)
       {
-         
          if (e.LeftButton == MouseButtonState.Pressed)
          {
             if (_CoordinatesLabel.Visibility == Visibility.Collapsed)
@@ -81,6 +82,10 @@ namespace dmweis.ASC.ArmController
             Canvas.SetTop(_EndEffector, position.Y - 10);
             Canvas.SetLeft( _CoordinatesLabel, position.X + 15 );
             Canvas.SetTop( _CoordinatesLabel, position.Y - 30 );
+         }
+         if (e.RightButton == MouseButtonState.Pressed)
+         {
+            (DataContext as ArmControllerViewModel)?.SwitchMagnetCommand.Execute( null );
          }
       }
 

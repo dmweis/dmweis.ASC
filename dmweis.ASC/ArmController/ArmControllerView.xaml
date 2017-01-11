@@ -8,12 +8,21 @@
              d:DesignHeight="300"
              d:DesignWidth="300"
              d:DataContext="{d:DesignInstance local:ArmControllerViewModel}">
+   <UserControl.Resources>
+      <local:BoolToColorConverter x:Key="BoolToColorConverter" TrueValue="Green" FalseValue="DarkRed"/>
+   </UserControl.Resources>
    <Grid>
       <Grid.ColumnDefinitions>
          <ColumnDefinition Width="*"/>
          <ColumnDefinition Width="11*"/>
          <ColumnDefinition Width="40"/>
       </Grid.ColumnDefinitions>
+      <!-- left panel -->
+      <StackPanel Grid.Column="0">
+         <Button Content="Magnet"
+                 Background="{Binding MagnetOn, Converter={StaticResource BoolToColorConverter}}"
+                 Command="{Binding SwitchMagnetCommand}"/>
+      </StackPanel>
       <!-- Main canvas-->
       <Border Grid.Column="1"
               BorderBrush="Gray"
