@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,6 +43,8 @@
   <ItemGroup>
     <Compile Include="Arm.cs" />
     <Compile Include="ArmConfiguration.cs" />
+    <Compile Include="HardwareConnection\HardwareService.cs" />
+    <Compile Include="HardwareConnection\SerialPortAddress.cs" />
     <Compile Include="IArm.cs" />
     <Compile Include="Scriping\ArmCommand.cs" />
     <Compile Include="ArmPosition.cs" />

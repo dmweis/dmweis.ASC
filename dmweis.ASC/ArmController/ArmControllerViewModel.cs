@@ -3,6 +3,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using dmweis.ASC.Connector;
+using dmweis.ASC.Connector.HardwareConnection;
 
 namespace dmweis.ASC.ArmController
 {
@@ -15,29 +16,29 @@ namespace dmweis.ASC.ArmController
       public RelayCommand ConnectCommand { get; }
       public RelayCommand<Position> MoveArmCommand { get; }
 
-      private string[] m_AvailablePorts;
-      public string[] AvailablePorts
+      private SerialPortAddress[] m_AvailablePorts;
+      public SerialPortAddress[] AvailablePorts
       {
          get { return m_AvailablePorts; }
          set { Set(ref m_AvailablePorts, value); }
       }
 
-      public string SelectedPort { get; set; }
+      public SerialPortAddress SelectedPort { get; set; }
 
       public ArmControllerViewModel()
       {
-         AvailablePorts = SerialPort.GetPortNames();
+         AvailablePorts = HardwareService.GetSerialPorts();
          RefreshPortsCommand = new RelayCommand(() =>
            {
-              AvailablePorts = SerialPort.GetPortNames();
-           });
+              AvailablePorts = HardwareService.GetSerialPorts();
+           } );
          ConnectCommand = new RelayCommand( Connect, () => m_Arm == null );
          MoveArmCommand = new RelayCommand<Position>( ArmCommand, ( pos ) => m_Arm != null );
       }
 
       private void Connect()
       {
-         m_Arm = new Arm(SelectedPort, "direct.xml" );
+         m_Arm = new Arm(SelectedPort.Name, "direct.xml" );
          ConnectCommand.RaiseCanExecuteChanged();
          MoveArmCommand.RaiseCanExecuteChanged();
       }
