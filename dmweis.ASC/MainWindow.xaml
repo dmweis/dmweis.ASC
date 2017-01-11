@@ -14,5 +14,26 @@
          <armController:ArmControllerView/>
       </DataTemplate>
    </Window.Resources>
-   <ContentPresenter Content="{Binding CurrentViewModel}"/>
+   <Grid>
+      <Grid.RowDefinitions>
+         <RowDefinition Height="50"/>
+         <RowDefinition/>
+      </Grid.RowDefinitions>
+      <StackPanel Orientation="Horizontal">
+         <Button Content="Refresh ports" Command="{Binding RefreshPortsCommand}"/>
+         <!-- Port combo box -->
+         <ComboBox ItemsSource="{Binding AvailablePorts}" SelectedItem="{Binding SelectedPort}">
+            <ComboBox.ItemTemplate>
+               <DataTemplate>
+                  <StackPanel Orientation="Horizontal">
+                     <TextBlock Text="{Binding Name}" Margin="0, 0, 5, 0"/>
+                     <TextBlock Text="{Binding Description}"/>
+                  </StackPanel>
+               </DataTemplate>
+            </ComboBox.ItemTemplate>
+         </ComboBox>
+         <Button Content="Connect" Command="{Binding ConnectCommand}"/>
+      </StackPanel>
+      <ContentPresenter Grid.Row="1" Content="{Binding CurrentViewModel}"/>
+   </Grid>
 </Window>

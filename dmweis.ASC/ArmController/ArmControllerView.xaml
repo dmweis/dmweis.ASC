@@ -9,36 +9,13 @@
              d:DesignWidth="300"
              d:DataContext="{d:DesignInstance local:ArmControllerViewModel}">
    <Grid>
-      <Grid.RowDefinitions>
-         <RowDefinition Height="*"/>
-         <RowDefinition Height="11*"/>
-      </Grid.RowDefinitions>
       <Grid.ColumnDefinitions>
          <ColumnDefinition Width="*"/>
          <ColumnDefinition Width="11*"/>
          <ColumnDefinition Width="40"/>
       </Grid.ColumnDefinitions>
-      <!-- Top bar -->
-      <StackPanel Grid.Column="1" 
-                  Grid.Row="0"
-                  Orientation="Horizontal">
-         <Button Content="Refresh ports" Command="{Binding RefreshPortsCommand}"/>
-         <!-- Port combo box -->
-         <ComboBox ItemsSource="{Binding AvailablePorts}" SelectedItem="{Binding SelectedPort}">
-            <ComboBox.ItemTemplate>
-               <DataTemplate>
-                  <StackPanel Orientation="Horizontal">
-                     <TextBlock Text="{Binding Name}" Margin="0, 0, 5, 0"/>
-                     <TextBlock Text="{Binding Description}"/>
-                  </StackPanel>
-               </DataTemplate>
-            </ComboBox.ItemTemplate>
-         </ComboBox>
-         <Button Content="Connect" Command="{Binding ConnectCommand}"/>
-      </StackPanel>
       <!-- Main canvas-->
       <Border Grid.Column="1"
-              Grid.Row="1"
               BorderBrush="Gray"
               BorderThickness="1">
          <Canvas x:Name="ArmCanvas"
@@ -52,12 +29,15 @@
          </Canvas>
       </Border>
       <!-- arm height scroll -->
-      <TextBlock Grid.Column="2"
-                 Grid.Row="0"
+      <Grid Grid.Column="2">
+         <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition/>
+         </Grid.RowDefinitions>
+         <TextBlock Grid.Row="0"
                  x:Name="ZValueTextBox"
                  Text="Z: 0.00"/>
-      <Slider Grid.Column="2"
-              Grid.Row="1"
+         <Slider Grid.Row="1"
               Maximum="50"
               Minimum="-50"
               Orientation="Vertical"
@@ -65,5 +45,6 @@
               TickPlacement="Both"
               ValueChanged="RangeBase_OnValueChanged"
               IsMoveToPointEnabled="True"/>
+      </Grid>
    </Grid>
 </UserControl>

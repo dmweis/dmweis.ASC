@@ -9,46 +9,26 @@ namespace dmweis.ASC.ArmController
 {
    class ArmControllerViewModel : ViewModelBase
    {
-      private IArm m_Arm;
+      private MainWindowViewModel m_MainViewModel;
       private bool m_SendingCommand;
 
-      public ICommand RefreshPortsCommand { get; }
-      public RelayCommand ConnectCommand { get; }
+      
       public RelayCommand<Position> MoveArmCommand { get; }
-
-      private SerialPortAddress[] m_AvailablePorts;
-      public SerialPortAddress[] AvailablePorts
-      {
-         get { return m_AvailablePorts; }
-         set { Set(ref m_AvailablePorts, value); }
-      }
 
       public SerialPortAddress SelectedPort { get; set; }
 
-      public ArmControllerViewModel()
+      public ArmControllerViewModel( MainWindowViewModel mainWindowViewModel )
       {
-         AvailablePorts = HardwareService.GetSerialPorts();
-         RefreshPortsCommand = new RelayCommand(() =>
-           {
-              AvailablePorts = HardwareService.GetSerialPorts();
-           } );
-         ConnectCommand = new RelayCommand( Connect, () => m_Arm == null );
-         MoveArmCommand = new RelayCommand<Position>( ArmCommand, ( pos ) => m_Arm != null );
-      }
-
-      private void Connect()
-      {
-         m_Arm = new Arm(SelectedPort.Name, "direct.xml" );
-         ConnectCommand.RaiseCanExecuteChanged();
-         MoveArmCommand.RaiseCanExecuteChanged();
+         m_MainViewModel = mainWindowViewModel;
+         MoveArmCommand = new RelayCommand<Position>( ArmCommand );
       }
 
       private async void ArmCommand(Position position)
       {
-         if (!m_SendingCommand)
+         if ( m_MainViewModel.Arm != null && !m_SendingCommand)
          {
             m_SendingCommand = true;
-            await m_Arm.MoveToCartesianAsync( position.X, position.Y, position.Z );
+            await m_MainViewModel.Arm.MoveToCartesianAsync( position.X, position.Y, position.Z );
             m_SendingCommand = false;
          }
       }
