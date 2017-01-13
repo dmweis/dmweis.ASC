@@ -8,11 +8,6 @@ namespace dmweis.ASC.Connector
 {
    public class Arm : IArm
    {
-      private const int c_BaseIndex = 0;
-      private const int c_ShoulderIndex = 1;
-      private const int c_ElbowIndex = 2;
-      private const int c_MagnetOn = 20;
-      private const int c_MagnetOff = 21;
 
       private IArmConnector m_ArmConnector;
       private ArmConfiguration m_Configuration;
