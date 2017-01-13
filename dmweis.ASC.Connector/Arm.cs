@@ -9,8 +9,8 @@ namespace dmweis.ASC.Connector
    public class Arm : IArm
    {
 
-      private IArmConnector m_ArmConnector;
-      private ArmConfiguration m_Configuration;
+      private readonly IArmConnector m_ArmConnector;
+      private readonly ArmConfiguration m_Configuration;
 
       public Arm( SerialPortAddress portAddress, string configurationFilePath ) : this( portAddress.Name, configurationFilePath )
       {
