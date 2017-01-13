@@ -7,6 +7,7 @@ namespace dmweis.ASC.Connector.Scriping
    public class ArmScript
    {
       public List<ArmCommand> Movements { get; set; }
+
       public ArmScript()
       {
          Movements = new List<ArmCommand>();

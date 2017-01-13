@@ -59,6 +59,9 @@
     <Compile Include="DoubleExtensions.cs" />
     <Compile Include="HardwareConnection\SerialPortExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scriping\DelayCommand.cs" />
+    <Compile Include="Scriping\MagnetCommand.cs" />
+    <Compile Include="Scriping\MoveCommand.cs" />
     <Compile Include="ServoPositions.cs" />
     <Compile Include="VerticalServoPositions.cs" />
   </ItemGroup>
