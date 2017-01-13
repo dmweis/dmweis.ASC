@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using dmweis.ASC.ArmController;
 using dmweis.ASC.Connector;
 using dmweis.ASC.Connector.HardwareConnection;
@@ -15,9 +10,9 @@ namespace dmweis.ASC
    class MainWindowViewModel : ViewModelBase
    {
 
-      private IArm m_Arm;
+      private ArmBase m_Arm;
 
-      public IArm Arm
+      public ArmBase Arm
       {
          get { return m_Arm; }
          private set { Set(() => Arm, ref m_Arm, value); }

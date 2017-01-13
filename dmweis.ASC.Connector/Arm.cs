@@ -6,9 +6,9 @@ using dmweis.ASC.Connector.Scriping;
 
 namespace dmweis.ASC.Connector
 {
-   public class Arm : IArm
+   public class Arm : ArmBase
    {
-      public double MaxArmReach { get; }
+      public override double MaxArmReach { get; }
 
       private readonly IArmConnector m_ArmConnector;
       private readonly ArmConfiguration m_Configuration;
@@ -25,9 +25,9 @@ namespace dmweis.ASC.Connector
          MaxArmReach = m_Configuration.ElbowLength + m_Configuration.ShoulderLength + m_Configuration.EndEffectorLength;
       }
 
-      public Task MoveToCartesianAsync( ArmPosition position )
+      public override async Task MoveToCartesianAsync( ArmPosition position )
       {
-         return MoveToCartesianAsync( position.X, position.Y, position.Z );
+         await MoveToCartesianAsync( position.X, position.Y, position.Z );
       }
 
       /// <summary>
@@ -37,11 +37,11 @@ namespace dmweis.ASC.Connector
       /// <param name="y"></param>
       /// <param name="z"></param>
       /// <returns></returns>
-      public Task MoveToCartesianAsync( double x, double y, double z )
+      public override async Task MoveToCartesianAsync( double x, double y, double z )
       {
          ServoPositions servoPositions = CalculateServosFromPosition( x, y, z );
          ServoPositions convertedServoPositions = ConvertToAbsoluteServoAnglesOrPwm( servoPositions );
-         return MoveToConvertedAnglesOrPwmAsync( convertedServoPositions );
+         await MoveToConvertedAnglesOrPwmAsync( convertedServoPositions );
       }
 
       /// <summary>
@@ -51,45 +51,16 @@ namespace dmweis.ASC.Connector
       /// <param name="distance"></param>
       /// <param name="z"></param>
       /// <returns></returns>
-      public Task MoveToRelative( double baseAngle, double distance, double z )
+      public override async Task MoveToRelativeAsync( double baseAngle, double distance, double z )
       {
          VerticalServoPositions verticalServoPositions = CalculateVerticalServoPositions( distance, z );
          ServoPositions convertedServoAnglesOrPwm = ConvertToAbsoluteServoAnglesOrPwm( new ServoPositions( baseAngle, verticalServoPositions ) );
-         return MoveToConvertedAnglesOrPwmAsync( convertedServoAnglesOrPwm );
+         await  MoveToConvertedAnglesOrPwmAsync( convertedServoAnglesOrPwm );
       }
 
-      public async Task SetMagnetAsync( bool on )
+      public override async Task SetMagnetAsync( bool on )
       {
          await m_ArmConnector.SetMagnetAsync(on);
-      }
-
-      public async Task<Arm> ExecuteScriptAsync( ArmScript script )
-      {
-         foreach( ArmCommand position in script.Movements )
-         {
-            await ExecuteCommandAsync( position );
-         }
-         return this;
-      }
-
-      public async Task<Arm> ExecuteCommandAsync( ArmCommand command, bool ignoreTimeouts = false )
-      {
-         command.Executed = true;
-         if( !ignoreTimeouts )
-         {
-            await Task.Delay( command.WaitBefore );
-         }
-         if (command.Magnet.HasValue)
-         {
-            await SetMagnetAsync(command.Magnet.Value);
-         }
-         await MoveToCartesianAsync(command.Position);
-         if( !ignoreTimeouts )
-         {
-            await Task.Delay( command.WaitAfter );
-         }
-         command.Executed = false;
-         return this;
       }
 
       /// <summary>
