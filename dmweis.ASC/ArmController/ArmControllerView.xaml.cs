@@ -109,7 +109,7 @@ namespace dmweis.ASC.ArmController
 
       private void ArmCanvas_OnMouseUp(object sender, MouseButtonEventArgs e)
       {
-         if (e.LeftButton == MouseButtonState.Released)
+         if (e.LeftButton == MouseButtonState.Released && e.ChangedButton == MouseButton.Left)
          {
             Point position = e.GetPosition( ArmCanvas );
             Point relativePosition = new Point();
