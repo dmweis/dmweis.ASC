@@ -8,6 +8,7 @@ namespace dmweis.ASC.Connector
 {
    public class Arm : IArm
    {
+      public double MaxArmReach { get; }
 
       private readonly IArmConnector m_ArmConnector;
       private readonly ArmConfiguration m_Configuration;
@@ -21,6 +22,7 @@ namespace dmweis.ASC.Connector
       {
          m_Configuration = ArmConfiguration.LoadArmConfig( configurationFilePath );
          m_ArmConnector = new ArmConnector( portAddress );
+         MaxArmReach = m_Configuration.ElbowLength + m_Configuration.ShoulderLength + m_Configuration.EndEffectorLength;
       }
 
       public Task MoveToCartesianAsync( ArmPosition position )

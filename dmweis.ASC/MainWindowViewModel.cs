@@ -14,7 +14,15 @@ namespace dmweis.ASC
 {
    class MainWindowViewModel : ViewModelBase
    {
-      public IArm Arm { get; private set; }
+
+      private IArm m_Arm;
+
+      public IArm Arm
+      {
+         get { return m_Arm; }
+         private set { Set(() => Arm, ref m_Arm, value); }
+      }
+
 
       public ICommand RefreshPortsCommand { get; }
       public RelayCommand ConnectCommand { get; }

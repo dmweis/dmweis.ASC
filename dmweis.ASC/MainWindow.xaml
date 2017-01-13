@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:dmweis.ASC"
         xmlns:armController="clr-namespace:dmweis.ASC.ArmController"
-        mc:Ignorable="d"
         Title="MainWindow"
         Height="350"
-        Width="1000">
+        Width="1000"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}">
    <Window.Resources>
       <DataTemplate DataType="{x:Type armController:ArmControllerViewModel}">
          <armController:ArmControllerView/>
@@ -20,9 +21,12 @@
          <RowDefinition/>
       </Grid.RowDefinitions>
       <StackPanel Orientation="Horizontal">
-         <Button Content="Refresh ports" Command="{Binding RefreshPortsCommand}"/>
+         <Button Content="Refresh ports" Command="{Binding RefreshPortsCommand}" Margin="10, 0"/>
          <!-- Port combo box -->
-         <ComboBox ItemsSource="{Binding AvailablePorts}" SelectedItem="{Binding SelectedPort}">
+         <ComboBox ItemsSource="{Binding AvailablePorts}" SelectedItem="{Binding SelectedPort}"
+                   MinWidth="120"
+                   Margin="10, 0"
+                   VerticalContentAlignment="Center">
             <ComboBox.ItemTemplate>
                <DataTemplate>
                   <StackPanel Orientation="Horizontal">
@@ -32,7 +36,12 @@
                </DataTemplate>
             </ComboBox.ItemTemplate>
          </ComboBox>
-         <Button Content="Connect" Command="{Binding ConnectCommand}"/>
+         <Button Content="Connect" Command="{Binding ConnectCommand}" Margin="10, 0"/>
+         <TextBlock Text="{Binding Path=Arm.MaxArmReach, StringFormat='Max arm reach: {0}'}"
+                    VerticalAlignment="Center"
+                    Margin="10, 0"
+                    FontSize="20"
+                    FontFamily="Seagon UI"/>
       </StackPanel>
       <ContentPresenter Grid.Row="1" Content="{Binding CurrentViewModel}"/>
    </Grid>

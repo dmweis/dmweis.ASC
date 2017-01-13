@@ -1,4 +1,5 @@
-﻿using System.IO.Ports;
+﻿using System;
+using System.IO.Ports;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -10,8 +11,9 @@ namespace dmweis.ASC.ArmController
    class ArmControllerViewModel : ViewModelBase
    {
       private MainWindowViewModel m_MainViewModel;
-
       private bool m_MagnetOn;
+
+      public IArm Arm => m_MainViewModel.Arm;
 
       public bool MagnetOn
       {
@@ -34,18 +36,24 @@ namespace dmweis.ASC.ArmController
 
       private async void SwitchMagnetAsync()
       {
-         if( m_MainViewModel.Arm != null )
+         if( Arm != null )
          {
             MagnetOn = !MagnetOn;
-            await m_MainViewModel.Arm.SetMagnetAsync( MagnetOn );
+            await Arm.SetMagnetAsync( MagnetOn );
          }
       }
 
       private async void ArmCommandAsync(Position position)
       {
-         if ( m_MainViewModel.Arm != null )
+         if ( Arm != null )
          {
-            await m_MainViewModel.Arm.MoveToCartesianAsync( position.X, position.Y, position.Z );
+            try
+            {
+               await Arm.MoveToCartesianAsync( position.X, position.Y, position.Z );
+            }
+            catch (InvalidOperationException )
+            {
+            }
          }
       }
    }

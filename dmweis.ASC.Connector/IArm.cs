@@ -8,6 +8,7 @@ namespace dmweis.ASC.Connector
 {
    public interface IArm
    {
+      double MaxArmReach { get; }
       Task MoveToCartesianAsync( ArmPosition position  );
       Task MoveToCartesianAsync( double x, double y, double z );
       Task SetMagnetAsync( bool on );
