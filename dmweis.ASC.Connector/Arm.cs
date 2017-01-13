@@ -60,7 +60,6 @@ namespace dmweis.ASC.Connector
 
       public async Task SetMagnetAsync( bool on )
       {
-         // 2 is the command number
          await m_ArmConnector.SetMagnetAsync(on);
       }
 
