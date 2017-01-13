@@ -33,6 +33,10 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Threading.Tasks.Dataflow, Version=4.5.24.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Tpl.Dataflow.4.5.24\lib\portable-net45+win8+wpa81\System.Threading.Tasks.Dataflow.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,14 +47,17 @@
   <ItemGroup>
     <Compile Include="Arm.cs" />
     <Compile Include="ArmConfiguration.cs" />
+    <Compile Include="HardwareConnection\ArmCommands.cs" />
+    <Compile Include="HardwareConnection\ArmConnector.cs" />
     <Compile Include="HardwareConnection\HardwareService.cs" />
+    <Compile Include="HardwareConnection\IArmConnector.cs" />
     <Compile Include="HardwareConnection\SerialPortAddress.cs" />
     <Compile Include="IArm.cs" />
     <Compile Include="Scriping\ArmCommand.cs" />
     <Compile Include="ArmPosition.cs" />
     <Compile Include="Scriping\ArmScript.cs" />
     <Compile Include="DoubleExtensions.cs" />
-    <Compile Include="SerialPortExtensions.cs" />
+    <Compile Include="HardwareConnection\SerialPortExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServoPositions.cs" />
     <Compile Include="VerticalServoPositions.cs" />
@@ -60,6 +67,9 @@
       <Project>{12490721-E52C-49EB-B7FC-3422EC5E7BCD}</Project>
       <Name>XboxController</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

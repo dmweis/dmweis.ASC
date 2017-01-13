@@ -10,8 +10,8 @@ namespace dmweis.ASC.Connector
    {
       Task MoveToCartesianAsync( ArmPosition position  );
       Task MoveToCartesianAsync( double x, double y, double z );
-      Task SetMagnet( bool on );
+      Task SetMagnetAsync( bool on );
       Task<Arm> ExecuteScriptAsync( ArmScript script );
-      Task<Arm> ExecuteCommand( ArmCommand command, bool ignoreTimeouts = false );
+      Task<Arm> ExecuteCommandAsync( ArmCommand command, bool ignoreTimeouts = false );
    }
 }

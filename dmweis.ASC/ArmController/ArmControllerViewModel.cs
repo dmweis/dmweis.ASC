@@ -10,7 +10,6 @@ namespace dmweis.ASC.ArmController
    class ArmControllerViewModel : ViewModelBase
    {
       private MainWindowViewModel m_MainViewModel;
-      private bool m_SendingCommand;
 
       private bool m_MagnetOn;
 
@@ -29,28 +28,24 @@ namespace dmweis.ASC.ArmController
       public ArmControllerViewModel( MainWindowViewModel mainWindowViewModel )
       {
          m_MainViewModel = mainWindowViewModel;
-         MoveArmCommand = new RelayCommand<Position>( ArmCommand );
-         SwitchMagnetCommand = new RelayCommand( SwitchMagnet );
+         MoveArmCommand = new RelayCommand<Position>( ArmCommandAsync );
+         SwitchMagnetCommand = new RelayCommand( SwitchMagnetAsync );
       }
 
-      private async void SwitchMagnet()
+      private async void SwitchMagnetAsync()
       {
-         if( m_MainViewModel.Arm != null && !m_SendingCommand )
+         if( m_MainViewModel.Arm != null )
          {
-            m_SendingCommand = true;
             MagnetOn = !MagnetOn;
-            await m_MainViewModel.Arm.SetMagnet( MagnetOn );
-            m_SendingCommand = false;
+            await m_MainViewModel.Arm.SetMagnetAsync( MagnetOn );
          }
       }
 
-      private async void ArmCommand(Position position)
+      private async void ArmCommandAsync(Position position)
       {
-         if ( m_MainViewModel.Arm != null && !m_SendingCommand)
+         if ( m_MainViewModel.Arm != null )
          {
-            m_SendingCommand = true;
             await m_MainViewModel.Arm.MoveToCartesianAsync( position.X, position.Y, position.Z );
-            m_SendingCommand = false;
          }
       }
    }

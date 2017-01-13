@@ -3,7 +3,7 @@ using System.IO.Ports;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace dmweis.ASC.Connector
+namespace dmweis.ASC.Connector.HardwareConnection
 {
    static class SerialPortExtensions
    {

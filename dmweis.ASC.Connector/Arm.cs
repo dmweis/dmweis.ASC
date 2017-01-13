@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO.Ports;
 using System.Threading.Tasks;
+using dmweis.ASC.Connector.HardwareConnection;
 using dmweis.ASC.Connector.Scriping;
 
 namespace dmweis.ASC.Connector
@@ -13,17 +14,18 @@ namespace dmweis.ASC.Connector
       private const int c_MagnetOn = 20;
       private const int c_MagnetOff = 21;
 
-      private SerialPort m_Arduino;
+      private IArmConnector m_ArmConnector;
       private ArmConfiguration m_Configuration;
 
-      public Arm( string port, string configurationFilePath )
+      public Arm( SerialPortAddress portAddress, string configurationFilePath ) : this( portAddress.Name, configurationFilePath )
+      {
+         
+      }
+
+      public Arm( string portAddress, string configurationFilePath )
       {
          m_Configuration = ArmConfiguration.LoadArmConfig( configurationFilePath );
-         m_Arduino = new SerialPort( port )
-         {
-            DtrEnable = false
-         };
-         m_Arduino.Open();
+         m_ArmConnector = new ArmConnector( portAddress );
       }
 
       public Task MoveToCartesianAsync( ArmPosition position )
@@ -42,7 +44,7 @@ namespace dmweis.ASC.Connector
       {
          ServoPositions servoPositions = CalculateServosFromPosition( x, y, z );
          ServoPositions convertedServoPositions = ConvertToAbsoluteServoAnglesOrPwm( servoPositions );
-         return MoveToConvertedAnglesOrPwm( convertedServoPositions );
+         return MoveToConvertedAnglesOrPwmAsync( convertedServoPositions );
       }
 
       /// <summary>
@@ -56,25 +58,25 @@ namespace dmweis.ASC.Connector
       {
          VerticalServoPositions verticalServoPositions = CalculateVerticalServoPositions( distance, z );
          ServoPositions convertedServoAnglesOrPwm = ConvertToAbsoluteServoAnglesOrPwm( new ServoPositions( baseAngle, verticalServoPositions ) );
-         return MoveToConvertedAnglesOrPwm( convertedServoAnglesOrPwm );
+         return MoveToConvertedAnglesOrPwmAsync( convertedServoAnglesOrPwm );
       }
 
-      public Task SetMagnet( bool on )
+      public async Task SetMagnetAsync( bool on )
       {
          // 2 is the command number
-         return SendMessage( new byte[] { 2, (byte) (on ? 1 : 0) } );
+         await m_ArmConnector.SetMagnetAsync(on);
       }
 
       public async Task<Arm> ExecuteScriptAsync( ArmScript script )
       {
          foreach( ArmCommand position in script.Movements )
          {
-            await ExecuteCommand( position );
+            await ExecuteCommandAsync( position );
          }
          return this;
       }
 
-      public async Task<Arm> ExecuteCommand( ArmCommand command, bool ignoreTimeouts = false )
+      public async Task<Arm> ExecuteCommandAsync( ArmCommand command, bool ignoreTimeouts = false )
       {
          command.Executed = true;
          if( !ignoreTimeouts )
@@ -83,7 +85,7 @@ namespace dmweis.ASC.Connector
          }
          if (command.Magnet.HasValue)
          {
-            await SetMagnet(command.Magnet.Value);
+            await SetMagnetAsync(command.Magnet.Value);
          }
          await MoveToCartesianAsync(command.Position);
          if( !ignoreTimeouts )
@@ -184,46 +186,12 @@ namespace dmweis.ASC.Connector
          return new ServoPositions( basePwm, shoulderPwm, elbowPwm );
       }
 
-      private Task MoveToConvertedAnglesOrPwm( ServoPositions servoPwmOrAngles )
+      private async Task MoveToConvertedAnglesOrPwmAsync( ServoPositions servoPwmOrAngles )
       {
-         byte[] message = SerializeFullServoCommand( servoPwmOrAngles );
-         return SendMessage( message );
+         await m_ArmConnector.MoveAllServosAsync( servoPwmOrAngles.Base.RoundToInt(),
+            servoPwmOrAngles.Shoulder.RoundToInt(),
+            servoPwmOrAngles.Elbow.RoundToInt() );
       }
 
-      /// <summary>
-      /// internal send methood
-      /// </summary>
-      /// <param name="message"></param>
-      /// <returns></returns>
-      private Task SendMessage( byte[] message )
-      {
-         return m_Arduino.WriteBytesAsync( message );
-      }
-
-      private byte[] SerializeFullServoCommand( ServoPositions servoPwmOrAngles )
-      {
-         byte[] byteArray = new byte[ 7 ];
-         byteArray[ 0 ] = 1; // command number
-         int pwm = servoPwmOrAngles.Base.RoundToInt();
-         byteArray[ 1 ] = (byte) ((pwm >> 8) & 0xFF);
-         byteArray[ 2 ] = (byte) (pwm & 0xFF);
-         pwm = servoPwmOrAngles.Shoulder.RoundToInt();
-         byteArray[ 3 ] = (byte) ((pwm >> 8) & 0xFF);
-         byteArray[ 4 ] = (byte) (pwm & 0xFF);
-         pwm = servoPwmOrAngles.Elbow.RoundToInt();
-         byteArray[ 5 ] = (byte) ((pwm >> 8) & 0xFF);
-         byteArray[ 6 ] = (byte) (pwm & 0xFF);
-         return byteArray;
-      }
-
-      private byte[] SerializeSingleServoCommand( int servoIndex, int pwm )
-      {
-         byte[] byteArray = new byte[ 4 ];
-         byteArray[ 0 ] = 0; // command number
-         byteArray[ 1 ] = (byte) servoIndex;
-         byteArray[ 2 ] = (byte) ((pwm >> 8) & 0xFF);
-         byteArray[ 3 ] = (byte) (pwm & 0xFF);
-         return byteArray;
-      }
    }
 }
