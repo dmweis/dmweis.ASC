@@ -21,7 +21,9 @@
       <StackPanel Grid.Column="0">
          <Button Content="Magnet"
                  Background="{Binding MagnetOn, Converter={StaticResource BoolToColorConverter}}"
-                 Command="{Binding SwitchMagnetCommand}"/>
+                 Command="{Binding SwitchMagnetCommand}"
+                 FontFamily="Saegon UI"
+                 FontSize="18"/>
       </StackPanel>
       <!-- Main canvas-->
       <Border Grid.Column="1"
