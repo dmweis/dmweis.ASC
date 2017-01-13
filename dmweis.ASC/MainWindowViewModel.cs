@@ -2,6 +2,7 @@
 using dmweis.ASC.ArmController;
 using dmweis.ASC.Connector;
 using dmweis.ASC.Connector.HardwareConnection;
+using dmweis.ASC.ScriptPanel;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 
@@ -10,17 +11,17 @@ namespace dmweis.ASC
    class MainWindowViewModel : ViewModelBase
    {
 
-      private ArmBase m_Arm;
-
-      public ArmBase Arm
-      {
-         get { return m_Arm; }
-         private set { Set(() => Arm, ref m_Arm, value); }
-      }
-
+      public ArmBase Arm => ArmService.Default.Arm;
 
       public ICommand RefreshPortsCommand { get; }
       public RelayCommand ConnectCommand { get; }
+
+      private ViewModelBase _SideViewModel;
+      public ViewModelBase SideViewModel
+      {
+         get { return _SideViewModel; }
+         set { Set(() => SideViewModel, ref _SideViewModel, value); }
+      }
 
       private ViewModelBase _currentViewModel;
       public ViewModelBase CurrentViewModel
@@ -51,18 +52,19 @@ namespace dmweis.ASC
 
       public MainWindowViewModel()
       {
-         AvailablePorts = HardwareService.GetSerialPorts();
+         AvailablePorts = ArmService.GetSerialPorts();
          RefreshPortsCommand = new RelayCommand( () =>
          {
-            AvailablePorts = HardwareService.GetSerialPorts();
+            AvailablePorts = ArmService.GetSerialPorts();
          } );
          ConnectCommand = new RelayCommand( Connect, () => Arm == null && SelectedPort != null );
-         CurrentViewModel = new ArmControllerViewModel( this );
+         CurrentViewModel = new ArmControllerViewModel();
+         SideViewModel = new ScriptPanelViewModel();
       }
 
       private void Connect()
       {
-         Arm = new Arm( SelectedPort.Name, "direct.xml" );
+         ArmService.Default.Connect( SelectedPort, "direct.xml" );
          ConnectCommand.RaiseCanExecuteChanged();
       }
 

@@ -71,6 +71,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ArmService.cs" />
     <Compile Include="ScriptPanel\ScriptPanelView.xaml.cs">
       <DependentUpon>ScriptPanelView.xaml</DependentUpon>
     </Compile>

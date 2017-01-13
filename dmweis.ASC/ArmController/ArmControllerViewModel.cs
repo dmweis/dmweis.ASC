@@ -13,7 +13,7 @@ namespace dmweis.ASC.ArmController
       private MainWindowViewModel m_MainViewModel;
       private bool m_MagnetOn;
 
-      public ArmBase Arm => m_MainViewModel.Arm;
+      public ArmBase Arm => ArmService.Default.Arm;
 
       public bool MagnetOn
       {
