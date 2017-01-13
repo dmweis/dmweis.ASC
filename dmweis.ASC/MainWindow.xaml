@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:dmweis.ASC"
         xmlns:armController="clr-namespace:dmweis.ASC.ArmController"
         Title="MainWindow"
-        Height="350"
-        Width="1000"
+        Height="700"
+        Width="900"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}">
    <Window.Resources>
