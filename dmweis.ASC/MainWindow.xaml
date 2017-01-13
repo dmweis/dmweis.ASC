@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:dmweis.ASC"
         xmlns:armController="clr-namespace:dmweis.ASC.ArmController"
-        Title="MainWindow"
+        xmlns:scriptPanel="clr-namespace:dmweis.ASC.ScriptPanel"
+        Title="David's Arm Controller"
         Height="700"
         Width="900"
         mc:Ignorable="d"
@@ -14,13 +15,20 @@
       <DataTemplate DataType="{x:Type armController:ArmControllerViewModel}">
          <armController:ArmControllerView/>
       </DataTemplate>
+      <DataTemplate DataType="{x:Type scriptPanel:ScriptPanelViewModel}">
+         <scriptPanel:ScriptPanelView/>
+      </DataTemplate>
    </Window.Resources>
    <Grid>
       <Grid.RowDefinitions>
          <RowDefinition Height="50"/>
          <RowDefinition/>
       </Grid.RowDefinitions>
-      <StackPanel Orientation="Horizontal">
+      <Grid.ColumnDefinitions>
+         <ColumnDefinition Width="*"/>
+         <ColumnDefinition Width="3*"/>
+      </Grid.ColumnDefinitions>
+      <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2">
          <Button Content="Refresh ports" Command="{Binding RefreshPortsCommand}" Margin="10, 0"/>
          <!-- Port combo box -->
          <ComboBox ItemsSource="{Binding AvailablePorts}" SelectedItem="{Binding SelectedPort}"
@@ -43,6 +51,7 @@
                     FontSize="20"
                     FontFamily="Seagon UI"/>
       </StackPanel>
-      <ContentPresenter Grid.Row="1" Content="{Binding CurrentViewModel}"/>
+      <ContentPresenter Grid.Column="0" Grid.Row="1" Content="{Binding SideViewModel}"/>
+      <ContentPresenter Grid.Column="1" Grid.Row="1" Content="{Binding CurrentViewModel}"/>
    </Grid>
 </Window>

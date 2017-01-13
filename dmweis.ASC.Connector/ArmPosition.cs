@@ -1,6 +1,8 @@
-﻿namespace dmweis.ASC.Connector
+﻿using System;
+
+namespace dmweis.ASC.Connector
 {
-   public class ArmPosition
+   public class ArmPosition : ICloneable
    {
       public double X { get; set; }
       public double Y { get; set; }
@@ -13,6 +15,17 @@
          X = x;
          Y = y;
          Z = z;
+      }
+
+      public object Clone()
+      {
+         ArmPosition newObj = new ArmPosition
+         {
+            X = X,
+            Y = Y,
+            Z = Z
+         };
+         return newObj;
       }
    }
 }

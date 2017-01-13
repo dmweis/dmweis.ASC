@@ -1,9 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Xml.Serialization;
 
 namespace dmweis.ASC.Connector
 {
-   public class ArmConfiguration
+   public class ArmConfiguration : ICloneable
    {
 
       public double EndEffectorLength { get; set; }
@@ -65,11 +66,36 @@ namespace dmweis.ASC.Connector
          }
       }
 
+      public object Clone()
+      {
+         ArmConfiguration newObj = new ArmConfiguration
+         {
+            EndEffectorLength = EndEffectorLength,
+            ShoulderLength = ShoulderLength,
+            ElbowLength = ElbowLength,
+            BaseMin = BaseMin.Clone() as CalibrationPair,
+            BaseMax = BaseMax.Clone() as CalibrationPair,
+            ShoulderMin = ShoulderMin.Clone() as CalibrationPair,
+            ShoulderMax = ShoulderMax.Clone() as CalibrationPair,
+            ElbowMin = ElbowMin.Clone() as CalibrationPair,
+            ElbowMax = ElbowMax.Clone() as CalibrationPair
+         };
+         return newObj;
+      }
    }
 
-   public class CalibrationPair
+   public class CalibrationPair : ICloneable
    {
       public double Pwm { get; set; }
       public double Angle { get; set; }
+      public object Clone()
+      {
+         CalibrationPair newObj = new CalibrationPair
+         {
+            Pwm = Pwm,
+            Angle = Angle
+         };
+         return newObj;
+      }
    }
 }

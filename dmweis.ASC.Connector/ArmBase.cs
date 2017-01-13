@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using dmweis.ASC.Connector.Scriping;
 using System.Threading.Tasks;
 
@@ -19,27 +20,14 @@ namespace dmweis.ASC.Connector
          }
          return;
       }
-      public async Task ExecuteCommandAsync( ArmCommand command )
+
+      public async Task ExecuteCommandAsync(ArmCommand command)
       {
-         var delayCommand = command as DelayCommand;
-         if (delayCommand != null)
-         {
-            await Task.Delay(delayCommand.DelayTime);
-            return;
-         }
-         var magnetCommand = command as MagnetCommand;
-         if (magnetCommand != null)
-         {
-            await SetMagnetAsync(magnetCommand.MagnetOn);
-            return;
-         }
-         var moveCommand = command as MoveCommand;
-         if (moveCommand != null)
-         {
-            await MoveToCartesianAsync(moveCommand.Position);
-            return;
-         }
-         throw new NotImplementedException("This command was not implemented");
+         await ExecuteCommandAsync(command as dynamic);
       }
+
+      private async Task ExecuteCommandAsync( MoveCommand command) => await MoveToCartesianAsync( command.Position );
+      private async Task ExecuteCommandAsync(DelayCommand command) => await Task.Delay(command.DelayTime);
+      private async Task ExecuteCommandAsync( MagnetCommand command ) => await SetMagnetAsync( command.MagnetOn );
    }
 }

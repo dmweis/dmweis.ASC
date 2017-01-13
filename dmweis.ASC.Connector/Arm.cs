@@ -13,15 +13,25 @@ namespace dmweis.ASC.Connector
       private readonly IArmConnector m_ArmConnector;
       private readonly ArmConfiguration m_Configuration;
 
-      public Arm( SerialPortAddress portAddress, string configurationFilePath ) : this( portAddress.Name, configurationFilePath )
+      public Arm( SerialPortAddress portAddress, string configurationFilePath ) : this( portAddress.Name, ArmConfiguration.LoadArmConfig(configurationFilePath) )
       {
          
       }
 
-      public Arm( string portAddress, string configurationFilePath )
+      public Arm( string portName, string configurationFilePath ) : this( portName, ArmConfiguration.LoadArmConfig( configurationFilePath ) )
       {
-         m_Configuration = ArmConfiguration.LoadArmConfig( configurationFilePath );
-         m_ArmConnector = new ArmConnector( portAddress );
+         
+      }
+
+      public Arm( SerialPortAddress portAddress, ArmConfiguration configuration ) : this( portAddress.Name, configuration )
+      {
+         
+      }
+
+      public Arm( string portName, ArmConfiguration configuration )
+      {
+         m_Configuration = (ArmConfiguration) configuration.Clone();
+         m_ArmConnector = new ArmConnector( portName );
          MaxArmReach = m_Configuration.ElbowLength + m_Configuration.ShoulderLength + m_Configuration.EndEffectorLength;
       }
 

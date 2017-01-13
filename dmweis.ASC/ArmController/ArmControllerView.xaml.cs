@@ -139,7 +139,7 @@ namespace dmweis.ASC.ArmController
          _CoordinatesLabel.Text = $"X: {x:F} \nY: {y:F}";
          if( ignoreCheck || Point.Subtract( _lastSentPosition, new Point( x, y ) ).Length > 0.4 )
          {
-            (DataContext as ArmControllerViewModel)?.MoveArmCommand.Execute( new Position(x, y, _lastSentZ ) );
+            (DataContext as ArmControllerViewModel)?.MoveArmCommand.Execute( new Position( x, y, _lastSentZ ) );
             _lastSentPosition = new Point(x, y);
          }
       }
@@ -160,6 +160,11 @@ namespace dmweis.ASC.ArmController
       private void ArmCanvas_OnMouseWheel(object sender, MouseWheelEventArgs e)
       {
          ArmSlider.Value += e.Delta / 240.0;
+      }
+
+      private void AddPositionCommandButton(object sender, RoutedEventArgs e)
+      {
+         (DataContext as ArmControllerViewModel)?.AddPositionCommand.Execute( new Position(_lastSentPosition.X, _lastSentPosition.Y, _lastSentZ));
       }
    }
 }

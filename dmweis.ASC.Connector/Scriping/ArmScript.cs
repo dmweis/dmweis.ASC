@@ -13,6 +13,11 @@ namespace dmweis.ASC.Connector.Scriping
          Movements = new List<ArmCommand>();
       }
 
+      public ArmScript( ICollection<ArmCommand> commands )
+      {
+         Movements = new List<ArmCommand>( commands );
+      }
+
       public static ArmScript ReadArmScript( string path )
       {
          ArmScript script;

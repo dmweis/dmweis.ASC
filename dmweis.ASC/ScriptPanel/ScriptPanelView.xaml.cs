@@ -12,9 +12,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using dmweis.ASC.Converters;
 
 namespace dmweis.ASC.ScriptPanel
 {
+
+   class ColorConverter : BoolToValueConverter<Brush> { }
    /// <summary>
    /// Interaction logic for ScriptPanelView.xaml
    /// </summary>

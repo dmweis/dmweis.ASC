@@ -24,6 +24,10 @@
                  Command="{Binding SwitchMagnetCommand}"
                  FontFamily="Saegon UI"
                  FontSize="18"/>
+         <Button Content="Add position as command"
+                 Click="AddPositionCommandButton"
+                 FontFamily="Saegon UI"
+                 FontSize="18"/>
       </StackPanel>
       <!-- Main canvas-->
       <Border Grid.Column="1"

@@ -4,10 +4,64 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:dmweis.ASC.ScriptPanel"
+             xmlns:commands="clr-namespace:dmweis.ASC.Connector.Scriping;assembly=dmweis.ASC.Connector"
+             xmlns:converters="clr-namespace:dmweis.ASC.Converters"
              mc:Ignorable="d"
              d:DesignHeight="300"
-             d:DesignWidth="300">
-    <Grid>
-            
-    </Grid>
+             d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance local:ScriptPanelViewModel}">
+   <UserControl.Resources>
+      <local:ColorConverter x:Key="ColorConverter" TrueValue="DarkGreen" FalseValue="DarkRed"/>
+      <converters:TimespanToTextConverter x:Key="TimespanToTextConverter"/>
+   </UserControl.Resources>
+   <Grid>
+      <Grid.RowDefinitions>
+         <RowDefinition Height="Auto"/>
+         <RowDefinition Height="*"/>
+         <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      <StackPanel Grid.Row="0">
+         <Button Content="Magnet On" Command="{Binding AddMagnetOnCommand}"/>
+         <Button Content="Magnet Off" Command="{Binding AddMagnetOffCommand}"/>
+         <Button Content="Add 1000 s" Command="{Binding AddDelayCommand}" CommandParameter="1000"/>
+      </StackPanel>
+      <ScrollViewer Grid.Row="1">
+         <ItemsControl ItemsSource="{Binding Commands}">
+            <ItemsControl.Resources>
+               <!-- Delay Command -->
+               <DataTemplate DataType="{x:Type commands:DelayCommand}">
+                  <Border BorderThickness="1" BorderBrush="Black" CornerRadius="8">
+                     <TextBox Text="{Binding DelayTime,
+                        StringFormat='Delay: {0}',
+                        Converter={StaticResource TimespanToTextConverter},
+                        ConverterParameter='Delay: '}"/>
+                  </Border>
+               </DataTemplate>
+               <!-- Magnet Command -->
+               <DataTemplate DataType="{x:Type commands:MagnetCommand}">
+                  <Border BorderThickness="1" BorderBrush="Black" CornerRadius="8">
+                     <TextBlock Text="{Binding MagnetOn, StringFormat='Magnet on: {0}'}"
+                             Background="{Binding MagnetOn, Converter={StaticResource ColorConverter}}"/>
+                  </Border>
+               </DataTemplate>
+               <!-- Move Command -->
+               <DataTemplate DataType="{x:Type commands:MoveCommand}">
+                  <Border BorderThickness="1" BorderBrush="Black" CornerRadius="8">
+                     <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Path=Position.X, StringFormat='X: {0:F}'}"/>
+                        <TextBlock Text="{Binding Path=Position.Y, StringFormat='Y: {0:F}'}" Margin="10, 0"/>
+                        <TextBlock Text="{Binding Path=Position.Z, StringFormat='Z: {0:F}'}"/>
+                     </StackPanel>
+                  </Border>
+               </DataTemplate>
+            </ItemsControl.Resources>
+         </ItemsControl>
+      </ScrollViewer>
+      <StackPanel Grid.Row="2">
+         <Button Content="Run script"
+                 Command="{Binding RunScriptCommand}"/>
+         <Button Content="Clear script"
+                 Command="{Binding ClearScriptCommand}"/>
+      </StackPanel>
+   </Grid>
 </UserControl>

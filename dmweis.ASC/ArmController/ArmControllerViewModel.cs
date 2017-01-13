@@ -1,16 +1,17 @@
 ﻿using System;
 using System.IO.Ports;
+using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using dmweis.ASC.Connector;
 using dmweis.ASC.Connector.HardwareConnection;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace dmweis.ASC.ArmController
 {
    class ArmControllerViewModel : ViewModelBase
    {
-      private MainWindowViewModel m_MainViewModel;
       private bool m_MagnetOn;
 
       public ArmBase Arm => ArmService.Default.Arm;
@@ -24,14 +25,20 @@ namespace dmweis.ASC.ArmController
 
       public RelayCommand<Position> MoveArmCommand { get; }
       public RelayCommand SwitchMagnetCommand { get; }
+      public RelayCommand<Position> AddPositionCommand { get; }
 
       public SerialPortAddress SelectedPort { get; set; }
 
-      public ArmControllerViewModel( MainWindowViewModel mainWindowViewModel )
+      public ArmControllerViewModel()
       {
-         m_MainViewModel = mainWindowViewModel;
          MoveArmCommand = new RelayCommand<Position>( ArmCommandAsync );
          SwitchMagnetCommand = new RelayCommand( SwitchMagnetAsync );
+         AddPositionCommand = new RelayCommand<Position>( OnAddPositionCommand );
+      }
+
+      private void OnAddPositionCommand( Position position )
+      {
+         Messenger.Default.Send( new ArmPosition( position.X, position.Y, position.Z) );
       }
 
       private async void SwitchMagnetAsync()
