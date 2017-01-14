@@ -9,6 +9,39 @@ namespace dmweis.ASC.Connector
 {
    public class Arm : ArmBase
    {
+      private double m_BasePwm;
+      public override double BasePwm
+      {
+         get { return m_BasePwm; }
+         protected set
+         {
+            m_BasePwm = value;
+            RaisePropertyChangeEvent();
+         }
+      }
+
+      private double m_ShoulderPwm;
+      public override double ShoulderPwm
+      {
+         get { return m_ShoulderPwm; }
+         protected set
+         {
+            m_ShoulderPwm = value;
+            RaisePropertyChangeEvent();
+         }
+      }
+
+      private double m_ElbowPwm;
+      public override double ElbowPwm
+      {
+         get { return m_ElbowPwm; }
+         protected set
+         {
+            m_ElbowPwm = value;
+            RaisePropertyChangeEvent();
+         }
+      }
+
       public override double MaxArmReach { get; }
 
       private readonly IArmConnector m_ArmConnector;
@@ -34,6 +67,14 @@ namespace dmweis.ASC.Connector
          m_Configuration = (ArmConfiguration) configuration.Clone();
          m_ArmConnector = new ArmConnector( portName );
          MaxArmReach = m_Configuration.ElbowLength + m_Configuration.ShoulderLength + m_Configuration.EndEffectorLength;
+         m_ArmConnector.NewServoPosition += OnNewArmPosition;
+      }
+
+      private void OnNewArmPosition( object sender, ArmDataUpdateEvent e )
+      {
+         BasePwm = e.Current.Base;
+         ShoulderPwm = e.Current.Shoulder;
+         ElbowPwm = e.Current.Elbow;
       }
 
       public override async Task MoveToCartesianAsync( ArmPosition position )

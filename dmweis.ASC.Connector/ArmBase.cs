@@ -10,6 +10,10 @@ namespace dmweis.ASC.Connector
 {
    public abstract class ArmBase : INotifyPropertyChanged
    {
+      public abstract double BasePwm { get; protected set; }
+      public abstract double ShoulderPwm { get; protected set; }
+      public abstract double ElbowPwm { get; protected set; }
+
       public abstract double MaxArmReach { get; }
       public abstract Task MoveToCartesianAsync( ArmPosition position  );
       public abstract Task MoveToCartesianAsync( double x, double y, double z );
@@ -36,7 +40,7 @@ namespace dmweis.ASC.Connector
 
       public event PropertyChangedEventHandler PropertyChanged;
       [NotifyPropertyChangedInvocator]
-      protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+      protected virtual void RaisePropertyChangeEvent([CallerMemberName] string propertyName = null)
       {
          PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
       }
