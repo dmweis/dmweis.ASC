@@ -77,6 +77,14 @@ namespace dmweis.ASC.Connector.HardwareConnection
          await m_CommandBuffer.SendAsync(byteArray);
       }
 
+      public async Task SetServoSpeed(byte speed)
+      {
+         byte[] byteArray = new byte[2];
+         byteArray[0] = (byte) ArmCommands.ServoSpeed; // command number
+         byteArray[1] = speed;
+         await m_CommandBuffer.SendAsync(byteArray);
+      }
+
       private async void ArduinoWriterLoopAsync()
       {
          CancellationToken cancellationToken = m_CancellationTokenSource.Token;

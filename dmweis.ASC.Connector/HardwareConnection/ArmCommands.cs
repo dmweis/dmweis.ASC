@@ -10,6 +10,7 @@ namespace dmweis.ASC.Connector.HardwareConnection
    {
       SingleServoSet = 0,
       AllServoSet = 1,
-      MagnetControll = 2
+      MagnetControll = 2,
+      ServoSpeed = 3
    }
 }

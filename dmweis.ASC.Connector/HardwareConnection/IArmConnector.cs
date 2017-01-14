@@ -11,6 +11,7 @@ namespace dmweis.ASC.Connector.HardwareConnection
       Task SetMagnetAsync(bool turnOn);
       Task MoveAllServosAsync( ServoPositions position );
       Task MoveOneServoAsync( byte servoIndex, int servoPwm );
+      Task SetServoSpeed(byte speed);
       event EventHandler<ArmDataUpdateEvent> NewServoPosition;
    }
 }

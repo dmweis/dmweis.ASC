@@ -21,6 +21,7 @@ namespace dmweis.ASC
       {
          ArmConfiguration config = ArmConfiguration.LoadArmConfig(configurationPath);
          Arm = new Arm(port, config);
+         Arm.SetServoSpeed(20);
       }
 
       public static SerialPortAddress[] GetSerialPorts()
