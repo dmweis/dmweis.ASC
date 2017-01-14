@@ -8,7 +8,7 @@
         xmlns:scriptPanel="clr-namespace:dmweis.ASC.ScriptPanel"
         Title="David's Arm Controller"
         Height="700"
-        Width="900"
+        Width="1000"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}">
    <Window.Resources>
