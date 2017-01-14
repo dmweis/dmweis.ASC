@@ -1,11 +1,14 @@
 ﻿using System;
 using System.CodeDom;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using dmweis.ASC.Connector.Scriping;
 using System.Threading.Tasks;
+using dmweis.ASC.Connector.Annotations;
 
 namespace dmweis.ASC.Connector
 {
-   public abstract class ArmBase
+   public abstract class ArmBase : INotifyPropertyChanged
    {
       public abstract double MaxArmReach { get; }
       public abstract Task MoveToCartesianAsync( ArmPosition position  );
@@ -29,5 +32,12 @@ namespace dmweis.ASC.Connector
       private async Task ExecuteCommandAsync( MoveCommand command) => await MoveToCartesianAsync( command.Position );
       private async Task ExecuteCommandAsync(DelayCommand command) => await Task.Delay(command.DelayTime);
       private async Task ExecuteCommandAsync( MagnetCommand command ) => await SetMagnetAsync( command.MagnetOn );
+
+      public event PropertyChangedEventHandler PropertyChanged;
+      [NotifyPropertyChangedInvocator]
+      protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+      {
+         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+      }
    }
 }
