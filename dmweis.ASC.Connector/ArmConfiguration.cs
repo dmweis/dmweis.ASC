@@ -28,6 +28,7 @@ namespace dmweis.ASC.Connector
          ElbowMax = new CalibrationPair();
       }
 
+      #region AngleToPwm
       public double AngleToPwmForBase( double angle )
       {
          return Map( angle, BaseMin.Angle, BaseMax.Angle, BaseMin.Pwm, BaseMax.Pwm );
@@ -42,6 +43,24 @@ namespace dmweis.ASC.Connector
       {
          return Map( angle, ElbowMin.Angle, ElbowMax.Angle, ElbowMin.Pwm, ElbowMax.Pwm );
       }
+      #endregion
+
+      #region PwmToAngle
+      public double PwmToAngleForBase(double pwm)
+      {
+         return Map(pwm, BaseMin.Pwm, BaseMax.Pwm, BaseMin.Angle, BaseMax.Angle);
+      }
+
+      public double PwmToAngleForShoulder(double pwm)
+      {
+         return Map(pwm, ShoulderMin.Pwm, ShoulderMax.Pwm, ShoulderMin.Angle, ShoulderMax.Angle);
+      }
+
+      public double PwmToAngleForElbow(double pwm)
+      {
+         return Map(pwm, ElbowMin.Pwm, ElbowMax.Pwm, ElbowMin.Angle, ElbowMax.Angle);
+      }
+      #endregion
 
       private static double Map( double value, double inMin, double inMax, double outMin, double outMax )
       {

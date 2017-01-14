@@ -13,19 +13,19 @@ namespace dmweis.ASC.Connector
       private readonly IArmConnector m_ArmConnector;
       private readonly ArmConfiguration m_Configuration;
 
-      public Arm( SerialPortAddress portAddress, string configurationFilePath ) : this( portAddress.Name, ArmConfiguration.LoadArmConfig(configurationFilePath) )
+      public Arm( SerialPortAddress portAddress, string configurationFilePath ) : this( portAddress.Name, ArmConfiguration.LoadArmConfig( configurationFilePath ) )
       {
-         
+
       }
 
       public Arm( string portName, string configurationFilePath ) : this( portName, ArmConfiguration.LoadArmConfig( configurationFilePath ) )
       {
-         
+
       }
 
       public Arm( SerialPortAddress portAddress, ArmConfiguration configuration ) : this( portAddress.Name, configuration )
       {
-         
+
       }
 
       public Arm( string portName, ArmConfiguration configuration )
@@ -65,12 +65,12 @@ namespace dmweis.ASC.Connector
       {
          VerticalServoPositions verticalServoPositions = CalculateVerticalServoPositions( distance, z );
          ServoPositions convertedServoAnglesOrPwm = ConvertToAbsoluteServoAnglesOrPwm( new ServoPositions( baseAngle, verticalServoPositions ) );
-         await  MoveToConvertedAnglesOrPwmAsync( convertedServoAnglesOrPwm );
+         await MoveToConvertedAnglesOrPwmAsync( convertedServoAnglesOrPwm );
       }
 
       public override async Task SetMagnetAsync( bool on )
       {
-         await m_ArmConnector.SetMagnetAsync(on);
+         await m_ArmConnector.SetMagnetAsync( on );
       }
 
       /// <summary>
@@ -161,6 +161,32 @@ namespace dmweis.ASC.Connector
          double shoulderPwm = m_Configuration.AngleToPwmForShoulder( servoPositions.Shoulder );
          double elbowPwm = m_Configuration.AngleToPwmForElbow( servoPositions.Elbow );
          return new ServoPositions( basePwm, shoulderPwm, elbowPwm );
+      }
+
+      /// <summary>
+      /// procedure to convert from information from the arm to wanted angles
+      /// </summary>
+      /// <param name="servoPositions"></param>
+      /// <returns></returns>
+      private ServoPositions ConvertToAnglesFromServoOrPwm( ServoPositions servoPositions )
+      {
+         double baseAngle = m_Configuration.PwmToAngleForBase( servoPositions.Base );
+         double shoulderAngle = m_Configuration.PwmToAngleForShoulder( servoPositions.Shoulder );
+         double elbowAngle = m_Configuration.PwmToAngleForElbow( servoPositions.Elbow );
+         return new ServoPositions( baseAngle, shoulderAngle, elbowAngle );
+      }
+
+      private ArmPosition CalculateArmPositionFromServoAngles(double baseAngle, double shoulderAngle,
+         double groundToLevelAngle)
+      {
+         double Le = m_Configuration.ElbowLength;
+         double Ls = m_Configuration.ShoulderLength;
+         double endEffectorLenght = m_Configuration.EndEffectorLength;
+
+         double levelLen1 = Math.Cos(shoulderAngle) * Ls;
+         double levelLen2 = Math.Cos(groundToLevelAngle) * Le;
+         double distance = levelLen1 + levelLen2 + endEffectorLenght;
+         throw new NotImplementedException();
       }
 
       private async Task MoveToConvertedAnglesOrPwmAsync( ServoPositions servoPwmOrAngles )
