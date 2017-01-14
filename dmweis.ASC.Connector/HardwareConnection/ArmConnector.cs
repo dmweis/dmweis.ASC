@@ -11,10 +11,21 @@ namespace dmweis.ASC.Connector.HardwareConnection
 {
    class ArmConnector : IArmConnector, IDisposable
    {
+      //private static readonly byte[] c_IdData = { 42, 96, 42, 96, 42, 96, 42, 96, 42 };
+      private static readonly byte[] c_ServoDateIdentifier = {0, 1, 2};
+
+      private readonly BufferBlock<byte[]> m_CommandBuffer = new BufferBlock<byte[]>();
+      private readonly BufferBlock<byte[]> m_InputBuffer = new BufferBlock<byte[]>();
       private readonly Task m_SerialWriterTask;
-      private readonly BufferBlock<byte[]> m_CommandBuffer;
-      private readonly string m_PortAddress;
+      private readonly Task m_SerialReaderTask;
+      private readonly Task m_PropagatorTask;
       private readonly CancellationTokenSource m_CancellationTokenSource;
+      private readonly SerialPort m_Port;
+      private readonly string m_PortAddress;
+
+      public ServoPositions LastSetServoPositions { get; private set; }
+
+      public event EventHandler<ArmDataUpdateEvent> NewServoPosition; 
 
       public ArmConnector(SerialPortAddress portAddress) : this(portAddress.Name)
       {
@@ -24,8 +35,13 @@ namespace dmweis.ASC.Connector.HardwareConnection
       {
          m_PortAddress = portAddress;
          m_CancellationTokenSource = new CancellationTokenSource();
-         m_CommandBuffer = new BufferBlock<byte[]>();
-         m_SerialWriterTask = Task.Factory.StartNew( ServoWriterLoopAsync, TaskCreationOptions.LongRunning );
+         m_Port = new SerialPort( m_PortAddress );
+         m_Port.DtrEnable = false;
+         m_Port.Open();
+         m_Port.BaseStream.ReadTimeout = SerialPort.InfiniteTimeout;
+         m_SerialWriterTask = Task.Factory.StartNew( ArduinoWriterLoopAsync, TaskCreationOptions.LongRunning );
+         m_SerialReaderTask = Task.Factory.StartNew( ArduinoReadLoopAsync, TaskCreationOptions.LongRunning );
+         m_PropagatorTask = Task.Factory.StartNew( PropagatorLoopAsync, TaskCreationOptions.LongRunning );
       }
 
       public async Task SetMagnetAsync( bool turnOn )
@@ -34,17 +50,18 @@ namespace dmweis.ASC.Connector.HardwareConnection
          await m_CommandBuffer.SendAsync(byteArray);
       }
 
-      public async Task MoveAllServosAsync( int baseServo, int shoulderServo, int elbowServo )
+      public async Task MoveAllServosAsync( ServoPositions position )
       {
+         LastSetServoPositions = position;
          byte[] byteArray = new byte[ 7 ];
          byteArray[ 0 ] = (byte) ArmCommands.AllServoSet; // command number
-         int pwm = baseServo;
+         int pwm = position.Base.RoundToInt();
          byteArray[ 1 ] = (byte) ((pwm >> 8) & 0xFF);
          byteArray[ 2 ] = (byte) (pwm & 0xFF);
-         pwm = shoulderServo;
+         pwm = position.Shoulder.RoundToInt();
          byteArray[ 3 ] = (byte) ((pwm >> 8) & 0xFF);
          byteArray[ 4 ] = (byte) (pwm & 0xFF);
-         pwm = elbowServo;
+         pwm = position.Elbow.RoundToInt();
          byteArray[ 5 ] = (byte) ((pwm >> 8) & 0xFF);
          byteArray[ 6 ] = (byte) (pwm & 0xFF);
          await m_CommandBuffer.SendAsync( byteArray );
@@ -60,24 +77,76 @@ namespace dmweis.ASC.Connector.HardwareConnection
          await m_CommandBuffer.SendAsync(byteArray);
       }
 
-      private async void ServoWriterLoopAsync()
+      private async void ArduinoWriterLoopAsync()
       {
          CancellationToken cancellationToken = m_CancellationTokenSource.Token;
-         using( SerialPort arduino = new SerialPort( m_PortAddress ) )
+         try
          {
-            arduino.DtrEnable = false;
-            arduino.Open();
-            try
+            while (!cancellationToken.IsCancellationRequested)
             {
-               while (!cancellationToken.IsCancellationRequested)
+               byte[] nextCommand = await m_CommandBuffer.ReceiveAsync(cancellationToken);
+               await m_Port.WriteBytesAsync(nextCommand, cancellationToken);
+            }
+         }
+         catch (TaskCanceledException)
+         {
+         }
+      }
+
+      private async void ArduinoReadLoopAsync()
+      {
+         CancellationToken cancellationToken = m_CancellationTokenSource.Token;
+         try
+         {
+            while ( !cancellationToken.IsCancellationRequested )
+            {
+               byte[] incomingData = await m_Port.ReadAsync(10, cancellationToken);
+               await m_InputBuffer.SendAsync(incomingData, cancellationToken);
+            }
+         }
+         catch (TaskCanceledException)
+         {
+         }
+      }
+
+      private async void PropagatorLoopAsync()
+      {
+         CancellationToken cancellationToken = m_CancellationTokenSource.Token;
+         try
+         {
+            int counter = 0;
+            byte[] data = new byte[6];
+            while ( !cancellationToken.IsCancellationRequested )
+            {
+               byte[] incomingData = await m_InputBuffer.ReceiveAsync(cancellationToken);
+               foreach (var incomingByte in incomingData )
                {
-                  byte[] nextCommand = await m_CommandBuffer.ReceiveAsync(cancellationToken);
-                  await arduino.WriteBytesAsync(nextCommand, cancellationToken);
+                  if (counter > 2)
+                  {
+                     data[counter - c_ServoDateIdentifier.Length] = incomingByte;
+                     if ( counter - c_ServoDateIdentifier.Length == data.Length - 1)
+                     {
+                        int baseAngle = (data[0] << 8) | data[1];
+                        int shoulderAngle = (data[2] << 8) | data[3];
+                        int elbowAngle = (data[4] << 8) | data[5];
+                        var currentServoPosition = new ServoPositions(baseAngle, shoulderAngle, elbowAngle);
+                        NewServoPosition?.Invoke(this, new ArmDataUpdateEvent(currentServoPosition, LastSetServoPositions));
+                        counter = 0;
+                     }
+                     else
+                     {
+                        counter++;
+                     }
+                  }
+                  else if (incomingByte == c_ServoDateIdentifier[counter])
+                  {
+                     counter++;
+                  }
                }
             }
-            catch (TaskCanceledException)
-            {
-            }
+         }
+         catch (TaskCanceledException)
+         {
          }
       }
 

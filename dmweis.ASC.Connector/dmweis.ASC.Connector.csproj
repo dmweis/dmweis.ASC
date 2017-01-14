@@ -49,6 +49,7 @@
     <Compile Include="ArmConfiguration.cs" />
     <Compile Include="HardwareConnection\ArmCommands.cs" />
     <Compile Include="HardwareConnection\ArmConnector.cs" />
+    <Compile Include="HardwareConnection\ArmDataUpdateEvent.cs" />
     <Compile Include="HardwareConnection\HardwareService.cs" />
     <Compile Include="HardwareConnection\IArmConnector.cs" />
     <Compile Include="HardwareConnection\SerialPortAddress.cs" />

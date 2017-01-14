@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO.Ports;
+using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,21 +18,14 @@ namespace dmweis.ASC.Connector.HardwareConnection
          return @this.WriteBytesAsync( array, CancellationToken.None );
       }
 
-      public static async Task<byte[]> ReadAsync( this SerialPort @this, int maxSize, int millisTimeout )
+      public static async Task<byte[]> ReadAsync( this SerialPort @this, int maxSize, CancellationToken cancellationToken )
       {
          byte[] buffer = new byte[ maxSize ];
-         using( CancellationTokenSource tokenSource = new CancellationTokenSource( millisTimeout ) )
-         {
-            int finalCount = 0;
-            try
-            {
-               finalCount = await @this.BaseStream.ReadAsync( buffer, 0, maxSize, tokenSource.Token );
-            }
-            catch( OperationCanceledException ){}
-            byte[] tmpBuffer = new byte[ finalCount ];
-            Array.Copy( buffer, tmpBuffer, finalCount );
-            buffer = tmpBuffer;
-         }
+         int finalCount = 0;
+         finalCount = await @this.BaseStream.ReadAsync( buffer, 0, maxSize, cancellationToken );
+         byte[] tmpBuffer = new byte[ finalCount ];
+         Array.Copy( buffer, tmpBuffer, finalCount );
+         buffer = tmpBuffer;
          return buffer;
       }
    }

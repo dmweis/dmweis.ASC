@@ -9,7 +9,8 @@ namespace dmweis.ASC.Connector.HardwareConnection
    interface IArmConnector
    {
       Task SetMagnetAsync(bool turnOn);
-      Task MoveAllServosAsync( int baseServo, int shoulderServo, int elbowServo );
+      Task MoveAllServosAsync( ServoPositions position );
       Task MoveOneServoAsync( byte servoIndex, int servoPwm );
+      event EventHandler<ArmDataUpdateEvent> NewServoPosition;
    }
 }
