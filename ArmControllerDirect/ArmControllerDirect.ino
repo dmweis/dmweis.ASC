@@ -25,6 +25,8 @@ VarSpeedServo Base;
 VarSpeedServo Shoulder;
 VarSpeedServo Elbow;
 
+unsigned long previousMillis = 0;
+const long updateInterval = 2000;
 
 void setup() {
 	pinMode(magnetPin, OUTPUT);
@@ -38,6 +40,9 @@ void setup() {
 	Base.write(90, 10, true);
 	Shoulder.write(90, 10, true);
 	Elbow.write(90, 10, true);
+	byte testArray[] = { 42, 42, 42, 42 };
+	Serial.write(testArray, 4);
+	Serial.flush();
 }
 
 void loop() {
@@ -56,6 +61,26 @@ void loop() {
 			SetMagnet();
 			break;
 		}
+	}
+	unsigned long currentMillis = millis();
+	if (currentMillis - previousMillis >= updateInterval)
+	{
+		previousMillis = currentMillis;
+		byte byteArray[9];
+		uint16_t baseMicro = Base.readMicroseconds();
+		byteArray[0] = baseIndex;
+		byteArray[1] = ShoulderIndex;
+		byteArray[2] = ElbowIndex;
+		byteArray[3] = (baseMicro >> 8) & 0xFF;
+		byteArray[4] = baseMicro & 0xFF;
+		uint16_t shoulderMicro = Shoulder.readMicroseconds();
+		byteArray[5] = (shoulderMicro >> 8) & 0xFF;
+		byteArray[6] = shoulderMicro & 0xFF;
+		uint16_t elbowMicro = Elbow.readMicroseconds();
+		byteArray[7] = (elbowMicro >> 8) & 0xFF;
+		byteArray[8] = elbowMicro & 0xFF;
+		Serial.write(byteArray, 9);
+		Serial.flush();
 	}
 }
 
