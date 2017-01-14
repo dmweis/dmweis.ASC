@@ -74,6 +74,9 @@ namespace dmweis.ASC.Connector
          await m_ArmConnector.SetMagnetAsync( on );
       }
 
+      public override async Task SetServoSpeed(byte speed) => await m_ArmConnector.SetServoSpeed(speed);
+
+
       /// <summary>
       /// Function to calculate distance of target
       /// </summary>
@@ -177,15 +180,15 @@ namespace dmweis.ASC.Connector
          return new ServoPositions( baseAngle, shoulderAngle, elbowAngle );
       }
 
-      private ArmPosition CalculateArmPositionFromServoAngles(double baseAngle, double shoulderAngle,
-         double groundToLevelAngle)
+      private ArmPosition CalculateArmPositionFromServoAngles( double baseAngle, double shoulderAngle,
+         double groundToLevelAngle )
       {
          double Le = m_Configuration.ElbowLength;
          double Ls = m_Configuration.ShoulderLength;
          double endEffectorLenght = m_Configuration.EndEffectorLength;
 
-         double levelLen1 = Math.Cos(shoulderAngle) * Ls;
-         double levelLen2 = Math.Cos(groundToLevelAngle) * Le;
+         double levelLen1 = Math.Cos( shoulderAngle ) * Ls;
+         double levelLen2 = Math.Cos( groundToLevelAngle ) * Le;
          double distance = levelLen1 + levelLen2 + endEffectorLenght;
          throw new NotImplementedException();
       }
