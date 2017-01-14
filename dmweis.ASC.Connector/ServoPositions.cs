@@ -28,6 +28,14 @@ namespace dmweis.ASC.Connector
          return $"Base: {Base} Elbow: {Elbow} Shoulder: {Shoulder}";
       }
 
+      public bool RelativeEquals(ServoPositions other)
+      {
+         if( ReferenceEquals( null, other ) ) return false;
+         if( ReferenceEquals( this, other ) ) return true;
+         return Math.Abs(Base - other.Base) <= 1 && Math.Abs(Shoulder - other.Shoulder) <= 1 &&
+                Math.Abs(Elbow - other.Elbow) <= 1;
+      }
+
       public bool Equals(ServoPositions other)
       {
          if (ReferenceEquals(null, other)) return false;

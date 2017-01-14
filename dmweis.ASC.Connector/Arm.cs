@@ -192,19 +192,24 @@ namespace dmweis.ASC.Connector
 
       private async Task MoveToConvertedAnglesOrPwmAsync( ServoPositions servoPwmOrAngles )
       {
-         await m_ArmConnector.MoveAllServosAsync(servoPwmOrAngles);
-         //ManualResetEvent manualResetEvent = new ManualResetEvent(false);
-         //EventHandler<ArmDataUpdateEvent> callback = null;
-         //callback = ( sender, armData ) =>
-         //{
-         //   if (armData.Current == armData.LastSent)
-         //   {
-         //      manualResetEvent.Set();
-         //      m_ArmConnector.NewServoPosition -= callback;
-         //   }
-         //};
-         //m_ArmConnector.NewServoPosition += callback;
-         //manualResetEvent.WaitOne();
+         TaskCompletionSource<bool> completionSource = new TaskCompletionSource<bool>();
+         EventHandler<ArmDataUpdateEvent> callback = null;
+         callback = ( sender, armData ) =>
+         {
+            if (!armData.LastSent.RelativeEquals(servoPwmOrAngles))
+            {
+               completionSource.SetResult( false );
+               m_ArmConnector.NewServoPosition -= callback;
+            }
+            else if( armData.Current.RelativeEquals( armData.LastSent ) )
+            {
+               completionSource.SetResult(true);
+               m_ArmConnector.NewServoPosition -= callback;
+            }
+         };
+         await m_ArmConnector.MoveAllServosAsync( servoPwmOrAngles );
+         m_ArmConnector.NewServoPosition += callback;
+         await completionSource.Task;
       }
 
    }
