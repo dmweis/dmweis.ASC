@@ -27,8 +27,6 @@ namespace dmweis.ASC.ArmController
       public RelayCommand SwitchMagnetCommand { get; }
       public RelayCommand<Position> AddPositionCommand { get; }
 
-      public SerialPortAddress SelectedPort { get; set; }
-
       public ArmControllerViewModel()
       {
          MoveArmCommand = new RelayCommand<Position>( ArmCommandAsync );
