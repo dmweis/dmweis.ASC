@@ -196,14 +196,14 @@ namespace dmweis.ASC.Connector
          EventHandler<ArmDataUpdateEvent> callback = null;
          callback = ( sender, armData ) =>
          {
-            if (!armData.LastSent.RelativeEquals(servoPwmOrAngles))
+            if( !armData.LastSent.RelativeEquals( servoPwmOrAngles ) )
             {
                completionSource.SetResult( false );
                m_ArmConnector.NewServoPosition -= callback;
             }
-            else if( armData.Current.RelativeEquals( armData.LastSent ) )
+            else if( armData.Current.RelativeEquals( servoPwmOrAngles ) )
             {
-               completionSource.SetResult(true);
+               completionSource.SetResult( true );
                m_ArmConnector.NewServoPosition -= callback;
             }
          };
