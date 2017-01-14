@@ -2,7 +2,16 @@
 {
    public class MoveCommand : ArmCommand
    {
-      public ArmPosition Position { get; set; }
+      private ArmPosition m_Position;
+      public ArmPosition Position
+      {
+         get { return m_Position; }
+         set
+         {
+            m_Position = value;
+            RaisePropertyChanged();
+         }
+      }
 
       public MoveCommand( double x, double y, double z )
       {

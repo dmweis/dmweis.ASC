@@ -19,17 +19,11 @@ namespace dmweis.ASC.Converters
       public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
       {
          string valueString = value as string;
-         string parameterString = parameter as string;
-         if ( parameterString != null)
+         if( parameter is string parameterString )
          {
-            valueString = valueString?.Replace(parameterString, String.Empty);
+            valueString = valueString?.Replace( parameterString, string.Empty );
          }
-         int milliseconds;
-         if (int.TryParse( valueString, out milliseconds ))
-         {
-            return TimeSpan.FromMilliseconds(milliseconds);
-         }
-         return TimeSpan.Zero;
+         return int.TryParse( valueString, out int milliseconds ) ? TimeSpan.FromMilliseconds(milliseconds) : TimeSpan.Zero;
       }
    }
 }

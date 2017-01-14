@@ -8,7 +8,19 @@ namespace dmweis.ASC.Connector.Scriping
 {
    public class DelayCommand : ArmCommand
    {
-      public TimeSpan DelayTime { get; set; }
+
+      private TimeSpan m_DelayTime;
+
+      public TimeSpan DelayTime
+      {
+         get { return m_DelayTime; }
+         set
+         {
+            m_DelayTime = value;
+            RaisePropertyChanged();
+         }
+      }
+
 
       public DelayCommand( TimeSpan delay )
       {

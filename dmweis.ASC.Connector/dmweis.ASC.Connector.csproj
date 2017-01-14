@@ -53,6 +53,7 @@
     <Compile Include="HardwareConnection\IArmConnector.cs" />
     <Compile Include="HardwareConnection\SerialPortAddress.cs" />
     <Compile Include="ArmBase.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Scriping\ArmCommand.cs" />
     <Compile Include="ArmPosition.cs" />
     <Compile Include="Scriping\ArmScript.cs" />
