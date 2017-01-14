@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO.Ports;
+using System.Threading;
 using System.Threading.Tasks;
 using dmweis.ASC.Connector.HardwareConnection;
 using dmweis.ASC.Connector.Scriping;
@@ -191,9 +192,19 @@ namespace dmweis.ASC.Connector
 
       private async Task MoveToConvertedAnglesOrPwmAsync( ServoPositions servoPwmOrAngles )
       {
-         await m_ArmConnector.MoveAllServosAsync( servoPwmOrAngles.Base.RoundToInt(),
-            servoPwmOrAngles.Shoulder.RoundToInt(),
-            servoPwmOrAngles.Elbow.RoundToInt() );
+         await m_ArmConnector.MoveAllServosAsync(servoPwmOrAngles);
+         //ManualResetEvent manualResetEvent = new ManualResetEvent(false);
+         //EventHandler<ArmDataUpdateEvent> callback = null;
+         //callback = ( sender, armData ) =>
+         //{
+         //   if (armData.Current == armData.LastSent)
+         //   {
+         //      manualResetEvent.Set();
+         //      m_ArmConnector.NewServoPosition -= callback;
+         //   }
+         //};
+         //m_ArmConnector.NewServoPosition += callback;
+         //manualResetEvent.WaitOne();
       }
 
    }
