@@ -7,6 +7,7 @@ using dmweis.ASC.Connector.Scriping;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
+using Microsoft.Win32;
 
 namespace dmweis.ASC.ScriptPanel
 {
@@ -22,6 +23,8 @@ namespace dmweis.ASC.ScriptPanel
       public RelayCommand<int> AddDelayCommand { get; }
       public RelayCommand RunScriptCommand { get; }
       public RelayCommand ClearScriptCommand { get; }
+      public RelayCommand SaveScriptCommand { get; }
+      public RelayCommand LoadScriptCommand { get; }
 
       public ScriptPanelViewModel()
       {
@@ -30,12 +33,14 @@ namespace dmweis.ASC.ScriptPanel
          AddDelayCommand = new RelayCommand<int>( OnNewDelayCommand );
          RunScriptCommand = new RelayCommand( OnRunScriptCommandAsync );
          ClearScriptCommand = new RelayCommand( () => Commands.Clear() );
+         SaveScriptCommand = new RelayCommand( OnSaveScriptCommand );
+         LoadScriptCommand = new RelayCommand( OnLoadScriptCommand );
          Messenger.Default.Register<ArmPosition>( this, OnNewArmPosition );
       }
 
       private async void OnRunScriptCommandAsync()
       {
-         if (Arm == null)
+         if( Arm == null )
          {
             return;
          }
@@ -58,14 +63,34 @@ namespace dmweis.ASC.ScriptPanel
          }
       }
 
-      private void OnNewMagnetCommand( bool turnOn )
+      private void OnLoadScriptCommand()
       {
-         Commands.Add( new MagnetCommand( turnOn ) );
+         OpenFileDialog dialogue = new OpenFileDialog();
+         dialogue.DefaultExt = ".xml";
+         dialogue.Filter = "XML Files (*.xml)|*.xml";
+         bool? result = dialogue.ShowDialog();
+         if( result == true )
+         {
+            ArmScript script = ArmScript.ReadArmScript( dialogue.FileName );
+            Commands.Clear();
+            script.Movements.ForEach( ( command ) => Commands.Add( command ) );
+         }
       }
 
-      private void OnNewArmPosition( ArmPosition position )
+      private void OnSaveScriptCommand()
       {
-         Commands.Add( new MoveCommand( position ) );
+         SaveFileDialog dialogue = new SaveFileDialog();
+         dialogue.Filter = "XML Files (*.xml)|*.xml";
+         dialogue.Title = "save script";
+         bool? result = dialogue.ShowDialog();
+         if( result == true )
+         {
+            ArmScript.SaveArmScript( dialogue.FileName, new ArmScript( Commands ) );
+         }
       }
+
+      private void OnNewMagnetCommand( bool turnOn ) => Commands.Add( new MagnetCommand( turnOn ) );
+
+      private void OnNewArmPosition( ArmPosition position ) => Commands.Add( new MoveCommand( position ) );
    }
 }

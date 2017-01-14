@@ -62,6 +62,10 @@
                  Command="{Binding RunScriptCommand}"/>
          <Button Content="Clear script"
                  Command="{Binding ClearScriptCommand}"/>
+         <Button Content="Save script"
+                 Command="{Binding SaveScriptCommand}"/>
+         <Button Content="Load script"
+                 Command="{Binding LoadScriptCommand}"/>
       </StackPanel>
    </Grid>
 </UserControl>
