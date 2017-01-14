@@ -31,9 +31,11 @@ const long updateInterval = 2000;
 void setup() {
 	pinMode(magnetPin, OUTPUT);
 	digitalWrite(magnetPin, LOW);
-	Base.attach(baseServoPin);
 	Shoulder.attach(shoulderServoPin);
+	delay(1000);
 	Elbow.attach(elbowServoPin);
+	delay(1000);
+	Base.attach(baseServoPin);
 	Serial.begin(9600);
 	while (!Serial);
 
