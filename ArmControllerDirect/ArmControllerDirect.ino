@@ -42,8 +42,8 @@ void setup() {
 	Base.write(90, 10, true);
 	Shoulder.write(90, 10, true);
 	Elbow.write(90, 10, true);
-	byte testArray[] = { 42, 42, 42, 42 };
-	Serial.write(testArray, 4);
+	byte testArray[] = { 42, 96, 42, 96, 42, 96, 42, 96, 42 };
+	Serial.write(testArray, sizeof(testArray));
 	Serial.flush();
 }
 
