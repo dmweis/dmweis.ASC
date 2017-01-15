@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows;
 using dmweis.ASC.Connector;
 using dmweis.ASC.Connector.Scriping;
 using GalaSoft.MvvmLight;
@@ -33,7 +34,7 @@ namespace dmweis.ASC.ScriptPanel
          AddMagnetOffCommand = new RelayCommand( () => OnNewMagnetCommand( false ) );
          AddDelayCommand = new RelayCommand<int>( OnNewDelayCommand );
          RunScriptCommand = new RelayCommand( OnRunScriptCommandAsync );
-         ClearScriptCommand = new RelayCommand( () => Commands.Clear() );
+         ClearScriptCommand = new RelayCommand( OnClearScript );
          SaveScriptCommand = new RelayCommand( OnSaveScriptCommand );
          LoadScriptCommand = new RelayCommand( OnLoadScriptCommand );
          DeleteCommand = new RelayCommand<ArmCommand>(OnDeleteCommand);
@@ -88,6 +89,19 @@ namespace dmweis.ASC.ScriptPanel
          if( result == true )
          {
             ArmScript.SaveArmScript( dialogue.FileName, new ArmScript( Commands ) );
+         }
+      }
+
+      private void OnClearScript()
+      {
+         MessageBoxResult result = MessageBox.Show(
+            "Are you sure you want to clear the script?",
+            "Arm controller",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Question);
+         if (result == MessageBoxResult.Yes)
+         {
+            Commands.Clear();
          }
       }
 
