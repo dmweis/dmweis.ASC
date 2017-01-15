@@ -53,11 +53,15 @@
                <!-- Move Command -->
                <DataTemplate DataType="{x:Type commands:MoveCommand}">
                   <Border BorderThickness="1" BorderBrush="Black">
-                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Path=Position.X, StringFormat='X: {0:F}'}"/>
-                        <TextBlock Text="{Binding Path=Position.Y, StringFormat='Y: {0:F}'}" Margin="10, 0"/>
-                        <TextBlock Text="{Binding Path=Position.Z, StringFormat='Z: {0:F}'}"/>
-                     </StackPanel>
+                     <TextBlock>
+                        <TextBlock.Text>
+                           <MultiBinding StringFormat="X: {0:F} Y: {1:F} Z: {2:F}">
+                              <Binding Path=".Position.X"/>
+                              <Binding Path=".Position.Y"/>
+                              <Binding Path=".Position.Z"/>
+                           </MultiBinding>
+                        </TextBlock.Text>
+                     </TextBlock>
                   </Border>
                </DataTemplate>
             </ItemsControl.Resources>
