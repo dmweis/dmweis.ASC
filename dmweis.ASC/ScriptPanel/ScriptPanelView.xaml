@@ -37,32 +37,64 @@
                <!-- Delay Command -->
                <DataTemplate DataType="{x:Type commands:DelayCommand}">
                   <Border BorderThickness="1" BorderBrush="Black">
-                     <TextBlock Text="{Binding DelayTime,
-                        StringFormat='Delay: {0}',
-                        Converter={StaticResource TimespanToTextConverter},
-                        ConverterParameter='Delay: '}"/>
+                     <Grid>
+                        <Grid.ColumnDefinitions>
+                           <ColumnDefinition Width="5*"/>
+                           <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                           Text="{Binding DelayTime,
+                           StringFormat='Delay: {0}',
+                           Converter={StaticResource TimespanToTextConverter},
+                           ConverterParameter='Delay: '}"/>
+                        <Button Content="Delete"
+                                Grid.Column="1"
+                                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}, Path=DataContext.DeleteCommand}"
+                                CommandParameter="{Binding}"/>
+                     </Grid>
                   </Border>
                </DataTemplate>
                <!-- Magnet Command -->
                <DataTemplate DataType="{x:Type commands:MagnetCommand}">
                   <Border BorderThickness="1" BorderBrush="Black">
-                     <TextBlock Text="{Binding MagnetOn, StringFormat='Magnet on: {0}'}"
-                             Background="{Binding MagnetOn, Converter={StaticResource ColorConverter}}">
-                     </TextBlock>
+                     <Grid>
+                        <Grid.ColumnDefinitions>
+                           <ColumnDefinition Width="5*"/>
+                           <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                Text="{Binding MagnetOn, StringFormat='Magnet on: {0}'}"
+                                Background="{Binding MagnetOn, Converter={StaticResource ColorConverter}}">
+                        </TextBlock>
+                        <Button Content="Delete"
+                                Grid.Column="1"
+                                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}, Path=DataContext.DeleteCommand}"
+                                CommandParameter="{Binding}"/>
+                     </Grid>
                   </Border>
                </DataTemplate>
                <!-- Move Command -->
                <DataTemplate DataType="{x:Type commands:MoveCommand}">
                   <Border BorderThickness="1" BorderBrush="Black">
-                     <TextBlock>
-                        <TextBlock.Text>
-                           <MultiBinding StringFormat="X: {0:F} Y: {1:F} Z: {2:F}">
-                              <Binding Path=".Position.X"/>
-                              <Binding Path=".Position.Y"/>
-                              <Binding Path=".Position.Z"/>
-                           </MultiBinding>
-                        </TextBlock.Text>
-                     </TextBlock>
+                     <Grid>
+                        <Grid.ColumnDefinitions>
+                           <ColumnDefinition Width="5*"/>
+                           <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0">
+                           <TextBlock.Text>
+                              <MultiBinding StringFormat="X: {0:F} Y: {1:F} Z: {2:F}">
+                                 <Binding Path=".Position.X"/>
+                                 <Binding Path=".Position.Y"/>
+                                 <Binding Path=".Position.Z"/>
+                              </MultiBinding>
+                           </TextBlock.Text>
+                        </TextBlock>
+                        <Button Content="Delete"
+                                Grid.Column="1"
+                                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}, Path=DataContext.DeleteCommand}"
+                                CommandParameter="{Binding}"/>
+                     </Grid>
                   </Border>
                </DataTemplate>
             </ItemsControl.Resources>
