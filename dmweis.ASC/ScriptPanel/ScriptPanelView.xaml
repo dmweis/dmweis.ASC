@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:dmweis.ASC.ScriptPanel"
+             xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
              xmlns:commands="clr-namespace:dmweis.ASC.Connector.Scriping;assembly=dmweis.ASC.Connector"
              xmlns:converters="clr-namespace:dmweis.ASC.Converters"
              mc:Ignorable="d"
@@ -26,11 +27,16 @@
          <Button Content="Add 1000 s" Command="{Binding AddDelayCommand}" CommandParameter="1000"/>
       </StackPanel>
       <ScrollViewer Grid.Row="1">
-         <ItemsControl ItemsSource="{Binding Commands}">
+         <ItemsControl ItemsSource="{Binding Commands}"
+                       dd:DragDrop.IsDragSource="True"
+                       dd:DragDrop.IsDropTarget="True">
             <ItemsControl.Resources>
+               <Style TargetType="{x:Type TextBlock}">
+                  <Setter Property="FontSize" Value="20"/>
+               </Style>
                <!-- Delay Command -->
                <DataTemplate DataType="{x:Type commands:DelayCommand}">
-                  <Border BorderThickness="1" BorderBrush="Black" CornerRadius="8">
+                  <Border BorderThickness="1" BorderBrush="Black">
                      <TextBox Text="{Binding DelayTime,
                         StringFormat='Delay: {0}',
                         Converter={StaticResource TimespanToTextConverter},
@@ -39,14 +45,14 @@
                </DataTemplate>
                <!-- Magnet Command -->
                <DataTemplate DataType="{x:Type commands:MagnetCommand}">
-                  <Border BorderThickness="1" BorderBrush="Black" CornerRadius="8">
+                  <Border BorderThickness="1" BorderBrush="Black">
                      <TextBlock Text="{Binding MagnetOn, StringFormat='Magnet on: {0}'}"
                              Background="{Binding MagnetOn, Converter={StaticResource ColorConverter}}"/>
                   </Border>
                </DataTemplate>
                <!-- Move Command -->
                <DataTemplate DataType="{x:Type commands:MoveCommand}">
-                  <Border BorderThickness="1" BorderBrush="Black" CornerRadius="8">
+                  <Border BorderThickness="1" BorderBrush="Black">
                      <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Path=Position.X, StringFormat='X: {0:F}'}"/>
                         <TextBlock Text="{Binding Path=Position.Y, StringFormat='Y: {0:F}'}" Margin="10, 0"/>

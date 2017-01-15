@@ -25,6 +25,7 @@ namespace dmweis.ASC.ScriptPanel
       public RelayCommand ClearScriptCommand { get; }
       public RelayCommand SaveScriptCommand { get; }
       public RelayCommand LoadScriptCommand { get; }
+      public RelayCommand<ArmCommand> DeleteCommand { get; }
 
       public ScriptPanelViewModel()
       {
@@ -35,6 +36,7 @@ namespace dmweis.ASC.ScriptPanel
          ClearScriptCommand = new RelayCommand( () => Commands.Clear() );
          SaveScriptCommand = new RelayCommand( OnSaveScriptCommand );
          LoadScriptCommand = new RelayCommand( OnLoadScriptCommand );
+         DeleteCommand = new RelayCommand<ArmCommand>(OnDeleteCommand);
          Messenger.Default.Register<ArmPosition>( this, OnNewArmPosition );
       }
 
@@ -92,5 +94,7 @@ namespace dmweis.ASC.ScriptPanel
       private void OnNewMagnetCommand( bool turnOn ) => Commands.Add( new MagnetCommand( turnOn ) );
 
       private void OnNewArmPosition( ArmPosition position ) => Commands.Add( new MoveCommand( position ) );
+
+      private void OnDeleteCommand(ArmCommand command) => Commands.Remove(command);
    }
 }
