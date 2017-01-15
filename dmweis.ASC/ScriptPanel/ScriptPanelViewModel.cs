@@ -68,6 +68,18 @@ namespace dmweis.ASC.ScriptPanel
 
       private void OnLoadScriptCommand()
       {
+         if (Commands.Count > 0)
+         {
+            MessageBoxResult messageBoxResult = MessageBox.Show(
+            "You will lose current script.\nAre you sure you want to continue?",
+            "Arm controller",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Warning );
+            if( messageBoxResult != MessageBoxResult.Yes )
+            {
+               return;
+            }
+         }
          OpenFileDialog dialogue = new OpenFileDialog();
          dialogue.DefaultExt = ".xml";
          dialogue.Filter = "XML Files (*.xml)|*.xml";
