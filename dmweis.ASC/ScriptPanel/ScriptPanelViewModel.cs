@@ -19,6 +19,13 @@ namespace dmweis.ASC.ScriptPanel
       public ObservableCollection<ArmCommand> Commands { get; }
          = new ObservableCollection<ArmCommand>();
 
+      private bool m_RepeatScript;
+      public bool RepeatScript
+      {
+         get { return m_RepeatScript; }
+         set { Set( () => RepeatScript, ref m_RepeatScript, value); }
+      }
+
       public RelayCommand AddMagnetOnCommand { get; }
       public RelayCommand AddMagnetOffCommand { get; }
       public RelayCommand<int> AddDelayCommand { get; }
@@ -48,10 +55,13 @@ namespace dmweis.ASC.ScriptPanel
             return;
          }
          List<ArmCommand> commands = new List<ArmCommand>( Commands );
-         foreach( var command in commands )
+         do
          {
-            await Arm.ExecuteCommandAsync( command );
-         }
+            foreach( var command in commands )
+            {
+               await Arm.ExecuteCommandAsync( command );
+            }
+         } while (RepeatScript);
       }
 
       private void OnNewDelayCommand( int seconds )
