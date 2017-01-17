@@ -35,6 +35,8 @@ namespace dmweis.ASC.ScriptPanel
       public RelayCommand LoadScriptCommand { get; }
       public RelayCommand<ArmCommand> DeleteCommand { get; }
 
+      private bool m_ScriptRunning;
+
       public ScriptPanelViewModel()
       {
          AddMagnetOnCommand = new RelayCommand( () => OnNewMagnetCommand( true ) );
@@ -54,14 +56,25 @@ namespace dmweis.ASC.ScriptPanel
          {
             return;
          }
+         if (m_ScriptRunning)
+         {
+            m_ScriptRunning = false;
+            return;
+         }
+         m_ScriptRunning = true;
          List<ArmCommand> commands = new List<ArmCommand>( Commands );
          do
          {
             foreach( var command in commands )
             {
+               if (!m_ScriptRunning)
+               {
+                  return;
+               }
                await Arm.ExecuteCommandAsync( command );
             }
          } while (RepeatScript);
+         m_ScriptRunning = false;
       }
 
       private void OnNewDelayCommand( int seconds )
