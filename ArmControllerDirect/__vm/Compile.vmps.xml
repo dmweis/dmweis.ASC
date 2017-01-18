@@ -32,19 +32,6 @@
           <MessageVariable Name="millis()" Index="1" />
         </MessageVariables>
       </BreakPoint>
-      <BreakPoint Index="2" Name="scriptpanelviewmodel.cs, line 98 character 59" Id="bc057779-aa0a-419b-9709-4bd31bd77672" Enabled="1" Message="" MessageTextType="2" PreProcessedMessage="" Condition="" ConditionType="1" CurrentHits="0" File="d:\programming\c#\visual_studio_projects_2017\dmweis.asc\dmweis.asc\scriptpanel\scriptpanelviewmodel.cs" FileLine="98" FileColumn="59" FunctionName="dmweis.ASC.ScriptPanel.ScriptPanelViewModel.OnDeleteCommand(ArmCommand command)" FunctionLineOffset="1" FunctionColumnOffset="1" HitCountTarget="1" HitCountType="1" Language="C#" LocationType="3" Tag="&lt;vmbp Id='3a6fe00d-67ea-407b-98ac-4174f0a3c110'/&gt;" Type="1" ToString="System.__ComObject" BreakWhenHit="1">
-        <Source>91	         }
-92	      }
-93	
-94	      private void OnNewMagnetCommand( bool turnOn ) =&gt; Commands.Add( new MagnetCommand( turnOn ) );
-95	
-96	      private void OnNewArmPosition( ArmPosition position ) =&gt; Commands.Add( new MoveCommand( position ) );
-97	
---&gt;98	      private void OnDeleteCommand(ArmCommand command) =&gt; Commands.Remove(command);
-99	   }
-100	}
-</Source>
-      </BreakPoint>
     </BreakPoints>
   </Program>
 </VisualMicro>
