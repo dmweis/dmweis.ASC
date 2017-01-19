@@ -32,11 +32,23 @@ namespace dmweis.ASC.CameraTracker
          _Window.SetMouseCallback(OnMOuseCallback );
       }
 
-      private void OnMOuseCallback(MouseEvent evt, int x, int y, MouseEventFlags flags)
+      private async void OnMOuseCallback(MouseEvent evt, int x, int y, MouseEventFlags flags)
       {
          if (flags == MouseEventFlags.LButton)
          {
-            
+            if (_Arm != null)
+            {
+               ArmBase tmpArm = _Arm;
+               _Arm = null;
+               await tmpArm.SetMagnetAsync(true);
+               await tmpArm.MoveToRelativeAsync(armAngle, armDistance + 8, armHeight);
+               await tmpArm.MoveToRelativeAsync(armAngle, armDistance + 8, -3.5);
+               await tmpArm.MoveToRelativeAsync(armAngle, armDistance, armHeight);
+               await tmpArm.MoveToRelativeAsync( armAngle, armDistance + 8, -3.5);
+               await tmpArm.SetMagnetAsync(false);
+               await tmpArm.MoveToRelativeAsync( armAngle, armDistance, armHeight);
+               _Arm = tmpArm;
+            }
          }
       }
 
