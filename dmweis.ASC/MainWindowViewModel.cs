@@ -1,5 +1,6 @@
 ﻿using System.Windows.Input;
 using dmweis.ASC.ArmController;
+using dmweis.ASC.CameraTracker;
 using dmweis.ASC.Connector;
 using dmweis.ASC.Connector.HardwareConnection;
 using dmweis.ASC.ScriptPanel;
@@ -15,6 +16,9 @@ namespace dmweis.ASC
 
       public ICommand RefreshPortsCommand { get; }
       public RelayCommand ConnectCommand { get; }
+      // Prototype camera track
+      public RelayCommand StartCameraCommand { get; }
+      private CameraController tracker;
 
       private ViewModelBase _SideViewModel;
       public ViewModelBase SideViewModel
@@ -60,6 +64,20 @@ namespace dmweis.ASC
          ConnectCommand = new RelayCommand( Connect, () => Arm == null && SelectedPort != null );
          CurrentViewModel = new ArmControllerViewModel();
          SideViewModel = new ScriptPanelViewModel();
+         StartCameraCommand = new RelayCommand(SwitchCamera);
+      }
+
+      private void SwitchCamera()
+      {
+         if (tracker == null)
+         {
+            tracker = new CameraController(Arm);
+         }
+         else
+         {
+            tracker.Close();
+            tracker = null;
+         }
       }
 
       private void Connect()

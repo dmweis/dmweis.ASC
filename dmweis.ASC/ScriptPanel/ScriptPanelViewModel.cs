@@ -71,7 +71,14 @@ namespace dmweis.ASC.ScriptPanel
                {
                   return;
                }
-               await Arm.ExecuteCommandAsync( command );
+               try
+               {
+                  await Arm.ExecuteCommandAsync( command );
+
+               }
+               catch (InvalidOperationException)
+               {
+               }
             }
          } while (RepeatScript);
          m_ScriptRunning = false;

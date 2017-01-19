@@ -50,6 +50,7 @@
                     Margin="10, 0"
                     FontSize="20"
                     FontFamily="Seagon UI"/>
+         <Button Content="Start tracking (PROTOTYPE)" Command="{Binding StartCameraCommand}" Margin="10, 0"/>
       </StackPanel>
       <ContentPresenter Grid.Column="0" Grid.Row="1" Content="{Binding SideViewModel}"/>
       <ContentPresenter Grid.Column="1" Grid.Row="1" Content="{Binding CurrentViewModel}"/>
