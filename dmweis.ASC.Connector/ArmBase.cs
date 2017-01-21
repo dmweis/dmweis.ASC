@@ -18,6 +18,7 @@ namespace dmweis.ASC.Connector
       public abstract Task MoveToCartesianAsync( ArmPosition position  );
       public abstract Task MoveToCartesianAsync( double x, double y, double z );
       public abstract Task MoveToRelativeAsync(double baseAngle, double distance, double z);
+      public abstract Task MoveServosToAsync(double @base, double shoulder, double elbow);
       public abstract Task SetMagnetAsync( bool on );
       public abstract Task SetServoSpeed(byte speed);
       public async Task ExecuteScriptAsync(ArmScript script)

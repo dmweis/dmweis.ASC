@@ -110,6 +110,11 @@ namespace dmweis.ASC.Connector
          await MoveToConvertedAnglesOrPwmAsync( convertedServoAnglesOrPwm );
       }
 
+      public override async Task MoveServosToAsync( double @base, double shoulder, double elbow )
+      {
+         await MoveToConvertedAnglesOrPwmAsync(new ServoPositions(@base, shoulder, elbow));
+      }
+
       public override async Task SetMagnetAsync( bool on )
       {
          await m_ArmConnector.SetMagnetAsync( on );
@@ -255,6 +260,5 @@ namespace dmweis.ASC.Connector
          m_ArmConnector.NewServoPosition += callback;
          await completionSource.Task;
       }
-
    }
 }
