@@ -8,6 +8,7 @@ namespace dmweis.ASC.Connector
    {
 
       public double EndEffectorLength { get; set; }
+      public double BaseToShoulderDistance { get; set; }
       public double ShoulderLength { get; set; }
       public double ElbowLength { get; set; }
 
@@ -90,6 +91,7 @@ namespace dmweis.ASC.Connector
          ArmConfiguration newObj = new ArmConfiguration
          {
             EndEffectorLength = EndEffectorLength,
+            BaseToShoulderDistance = BaseToShoulderDistance,
             ShoulderLength = ShoulderLength,
             ElbowLength = ElbowLength,
             BaseMin = BaseMin.Clone() as CalibrationPair,
