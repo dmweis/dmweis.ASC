@@ -21,11 +21,11 @@
     <Angle>5</Angle>
   </ShoulderMax>
   <ElbowMin>
-    <Pwm>1950</Pwm>
+    <Pwm>1650</Pwm>
     <Angle>90</Angle>
   </ElbowMin>
   <ElbowMax>
     <Pwm>1300</Pwm>
-    <Angle>45</Angle>
+    <Angle>55</Angle>
   </ElbowMax>
 </ArmConfiguration>
