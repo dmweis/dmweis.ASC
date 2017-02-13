@@ -1,11 +1,13 @@
-﻿using System.Windows.Input;
+﻿using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 using dmweis.ASC.ArmController;
-using dmweis.ASC.CameraTracker;
 using dmweis.ASC.Connector;
 using dmweis.ASC.Connector.HardwareConnection;
 using dmweis.ASC.ScriptPanel;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+//using dmweis.ASC.CameraTracker;
 
 namespace dmweis.ASC
 {
@@ -18,7 +20,7 @@ namespace dmweis.ASC
       public RelayCommand ConnectCommand { get; }
       // Prototype camera track
       public RelayCommand StartCameraCommand { get; }
-      private CameraController tracker;
+      //private CameraController tracker;
 
       private ViewModelBase _SideViewModel;
       public ViewModelBase SideViewModel
@@ -69,15 +71,16 @@ namespace dmweis.ASC
 
       private void SwitchCamera()
       {
-         if (tracker == null)
-         {
-            tracker = new CameraController(Arm);
-         }
-         else
-         {
-            tracker.Close();
-            tracker = null;
-         }
+         Task.Run(() =>  MessageBox.Show("Tracking not fucntional in this version", "David's Arm controller", MessageBoxButton.OK));
+         //if (tracker == null)
+         //{
+         //   tracker = new CameraController(Arm);
+         //}
+         //else
+         //{
+         //   tracker.Close();
+         //   tracker = null;
+         //}
       }
 
       private void Connect()
