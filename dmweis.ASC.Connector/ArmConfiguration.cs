@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
 
 namespace dmweis.ASC.Connector
 {
@@ -84,6 +85,11 @@ namespace dmweis.ASC.Connector
             XmlSerializer serializer = new XmlSerializer( typeof( ArmConfiguration ) );
             serializer.Serialize( file, configuration );
          }
+      }
+
+      public void SaveArmConfigAsJson(string path)
+      {
+         File.WriteAllText(path, JsonConvert.SerializeObject(this));
       }
 
       public object Clone()
