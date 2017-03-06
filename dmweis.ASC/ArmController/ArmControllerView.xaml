@@ -34,6 +34,7 @@
               BorderBrush="Gray"
               BorderThickness="1">
          <Canvas x:Name="ArmCanvas"
+                 ClipToBounds="True"
                  MouseDown="ArmCanvas_OnMouseDown"
                  MouseUp="ArmCanvas_OnMouseUp"
                  MouseMove="ArmCanvas_OnMouseMove"

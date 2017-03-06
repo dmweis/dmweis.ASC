@@ -24,7 +24,7 @@ namespace dmweis.ASC.ArmController
    {
 
       private readonly Line _line;
-      private readonly Ellipse _ArmCircle;
+      private readonly Ellipse[] _ArmCircles;
       private readonly Ellipse _EndEffector;
       private readonly TextBlock _CoordinatesLabel;
       private Point _lastSentPosition;
@@ -38,13 +38,17 @@ namespace dmweis.ASC.ArmController
             Stroke = Brushes.Gray,
             StrokeThickness = 2
          };
-         _ArmCircle = new Ellipse
+         _ArmCircles = new Ellipse[6];
+         for (int i = 0; i < _ArmCircles.Length; i++)
          {
-            Stroke = Brushes.Red,
-            StrokeThickness = 1,
-            Width = 120,
-            Height = 120
-         };
+            _ArmCircles[i] = new Ellipse
+            {
+               Stroke = Brushes.Red,
+               StrokeThickness = 1,
+               Width = 120 + i * 100,
+               Height = 120 + i * 100
+            };
+         }
          _EndEffector = new Ellipse
          {
             Stroke = Brushes.DarkBlue,
@@ -57,7 +61,10 @@ namespace dmweis.ASC.ArmController
             Visibility = Visibility.Collapsed
          };
          ArmCanvas.Children.Add(_line);
-         ArmCanvas.Children.Add( _ArmCircle );
+         foreach (var circle in _ArmCircles)
+         {
+            ArmCanvas.Children.Add( circle );
+         }
          ArmCanvas.Children.Add( _EndEffector );
          ArmCanvas.Children.Add(_CoordinatesLabel);
          _lastSentPosition = new Point(0, 0);
@@ -126,8 +133,11 @@ namespace dmweis.ASC.ArmController
          Point bottomMiddle = new Point();
          bottomMiddle.X = ArmCanvas.ActualWidth / 2;
          bottomMiddle.Y = ArmCanvas.ActualHeight;
-         Canvas.SetTop(_ArmCircle, bottomMiddle.Y - _ArmCircle.ActualHeight/2);
-         Canvas.SetLeft(_ArmCircle, bottomMiddle.X - _ArmCircle.ActualWidth/2);
+         foreach (var circle in _ArmCircles)
+         {
+            Canvas.SetTop(circle, bottomMiddle.Y - circle.ActualHeight/2);
+            Canvas.SetLeft(circle, bottomMiddle.X - circle.ActualWidth/2);
+         }
          _line.X1 = bottomMiddle.X;
          _line.Y1 = bottomMiddle.Y;
       }
